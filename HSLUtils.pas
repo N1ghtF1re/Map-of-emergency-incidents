@@ -104,8 +104,14 @@ var
   A:array [1..19]  of Integer;
   i,prmax,currmax,j:Integer;
 begin
+  tmpcity:=sitarr[1].city;
   for i:= 0 to length(SitArr) - 1 do
   begin
+  for j := 1 to 19 do
+    begin
+      A[j]:=0;
+    end;
+
     while
     sitarr[i].city = tmpcity do
     begin
