@@ -134,10 +134,11 @@ var
   r,g,b: integer;
   sum: LongInt;
   Col: TColor;
-  Colorik: array[0..2000] of TColor;
+  Colorik: TStringList;
   XLSFile: string;
   currN:integer;
   Rec: TRecordCust;
+  HexCol : Cardinal;
 begin
   r:=0;
   g:=0;
@@ -161,13 +162,17 @@ begin
 
   currN := 0;
   QuickSort( length(SitArr)-1, SitArr);
+
+  Colorik := TStringList.Create;
+
   for i := 0 to length(SitArr) - 1 do
   begin
     if SitArr[i].City = 'Воложинский район' then
     begin
       //ShowMessage(IntToStr(SitArr[i].TOfPloho-1));
       Rec := MassOfStandart[SitArr[i].TOfPloho-1];
-      Colorik[currN] := rgb(Rec.green, Rec.red, Rec.blue);
+      HexCol := rgb(Rec.green, Rec.red, Rec.blue);
+      Colorik.add(IntToStr( HexCol));
       inc(currN);
     end;
   end;
