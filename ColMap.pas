@@ -144,7 +144,7 @@ begin
   g:=0;
   b:=0;
 
-  N:=17;  // CHANGE PLS!!!!!!!!!!!
+  N:=19;  // CHANGE PLS!!!!!!!!!!!
 
   {if dlgOpen.Execute then     XLSFile := dlgOpen.FileName;}
   XLSFile := GetCurrentDir + '\kek.xlsx';
