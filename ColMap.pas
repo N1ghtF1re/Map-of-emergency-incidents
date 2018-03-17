@@ -98,8 +98,9 @@ begin
 
   N:=17;  // CHANGE PLS!!!!!!!!!!!
 
-  if dlgOpen.Execute then
-     XLSFile := dlgOpen.FileName;
+  {if dlgOpen.Execute then     XLSFile := dlgOpen.FileName;}
+  XLSFile := GetCurrentDir + '\kek.xlsx';
+
   Xls_Open(XLSFile, Memo1);
 
   SetLength(Colorik,N-1);
