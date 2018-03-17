@@ -149,8 +149,8 @@ begin
   Xls_Open(XLSFile, Memo1);
 
   QuickSort( length(SitArr)-1, SitArr);
-  for i := 0 to length(SitArr) - 1 do
-    Memo1.Lines.Add( SitArr[i].City + ' ' + SitArr[i].TOfPloho );
+  {for i := 0 to length(SitArr) - 1 do
+    Memo1.Lines.Add( SitArr[i].City + ' ' + SitArr[i].TOfPloho );}
 
 
   SetLength(Colorik,N-1);
