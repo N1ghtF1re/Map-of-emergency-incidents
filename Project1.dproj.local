@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.524,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.03.17 15:57:13.246,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.03.17 15:57:50.905,D:\ColoringMap.pas=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.03.17 15:57:50.905,D:\ColoringMap.dfm=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2018.03.17 15:58:54.864,D:\coloringMap\ColoringMap.pas=D:\ColoringMap.pas</Transaction>
+    <Transaction>2018.03.17 15:58:54.864,D:\coloringMap\ColoringMap.dfm=D:\ColoringMap.dfm</Transaction>
+    <Transaction>2018.03.17 16:00:47.812,D:\coloringMap\Map-of-emergency-incidents\ColoringMap.pas=D:\coloringMap\ColoringMap.pas</Transaction>
+    <Transaction>2018.03.17 16:00:47.812,D:\coloringMap\Map-of-emergency-incidents\ColoringMap.dfm=D:\coloringMap\ColoringMap.dfm</Transaction>
+    <Transaction>2018.03.17 16:00:52.922,D:\coloringMap\Map-of-emergency-incidents\Project1.dproj=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
