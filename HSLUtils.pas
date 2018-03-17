@@ -4,6 +4,12 @@ interface
 
 uses
   Windows, Graphics,System.Classes;
+  type
+    TSituationRec = Record
+    City: string[40];
+    TOfPloho: integer;
+  end;
+  TSitArr = array of TSituationRec;
 
 // Получить цвет, темнее исходного на Percent процентов
 function DarkerColor(const Color : TColor; Percent : Integer) : TColor;
@@ -85,4 +91,35 @@ begin
   Gray := (GetRValue(Result) + GetGValue(Result) + GetBValue(Result)) div 3;
   Result := RGB(Gray, Gray, Gray);
 end;
+function max(a,b:Integer):Integer;
+begin
+  if A>b then
+    result:=a
+    else
+    result:=b;
+end;
+function GetMaxVal(sitarr:TSitArr):Integer;
+var
+  tmpcity:string;
+  A:array [1..19]  of Integer;
+  i,prmax,currmax,j:Integer;
+begin
+  for i:= 0 to length(SitArr) - 1 do
+  begin
+    while
+    sitarr[i].city = tmpcity do
+    begin
+    Inc(A[SitArr[i].TOfPloho]);
+    end;
+   currmax:=A[1];
+   for j:=1 to 19 do
+   begin
+     if currmax<A[j] then
+     Currmax:=A[j];
+   end;
+   tmpcity:=sitarr[i].city;
+   result:=max(prmax,currmax);
+  end;
+end;
+
 end.
