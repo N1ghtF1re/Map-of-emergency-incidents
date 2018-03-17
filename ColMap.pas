@@ -16,7 +16,7 @@ type
     City: string[40];
     TOfPloho: string[2];
   end;
-
+  TSitArr = array of TSituationRec;
 
   TForm1 = class(TForm)
     Image1: TImage;
@@ -34,18 +34,63 @@ var
   Form1: TForm1;
   MassOfStandart: array of TRecordCust;
   N,shift:Integer;
+  SitArr: TSitArr;
 
 implementation
 
 {$R *.dfm}
+
+procedure QuickSort(const size: integer; QA: TSitArr);
+
+procedure Swap(var arr: TSitArr; var el1, el2: Integer);
+var tmp:TSituationRec;
+begin
+  tmp:=arr[el1];
+  arr[el1]:=arr[el2];
+  arr[el2]:=tmp;
+end;
+Procedure QSort(L,R: Integer);
+var
+  I,J,Y:Integer;
+  X:String;
+begin
+  I:=L;
+  J:=R;
+  X:=QA[(L+R) div 2].City;
+  repeat
+    while QA[I].City<X do
+    begin
+      Inc (I);
+    end;
+    while QA[J].City>X do
+    begin
+      Dec (J);
+    end;
+    if I<=J then
+    begin
+      SWAP(QA,i,j);
+      Inc (I);
+      Dec (J);
+    end;
+  until I>J;
+  if J>L then
+    QSort(L,J);
+  if I<R then
+    QSort(I,R);
+end;
+begin
+  QSort (0,size);
+end;
+
 
 procedure Xls_Open(XLSFile:string; Memo: TMemo);
  const
   xlCellTypeLastCell = $0000000B;
 var
   ExlApp, Sheet: OLEVariant;
-  i, j, r, c:integer;
-
+  j, r, c:integer;
+  CI, SI: integer;
+  tmp: string;
 begin
   ExlApp := CreateOleObject('Excel.Application');
 
@@ -57,13 +102,22 @@ begin
 
   Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
-    r := ExlApp.ActiveCell.Row;
+  r := ExlApp.ActiveCell.Row;
+  SetLength(SitArr, r);
+  for j:= 2 to r do
+  begin
+    SI:= 57+26;
+    CI:=1;
 
-     for j:= 1 to r do
-     begin
-         i:= 57+26;
-         Memo.Lines.Add(sheet.cells[j,i]);
-     end;
+    SitArr[j].City := sheet.cells[j, CI];
+    tmp := sheet.cells[j, SI];
+
+    if tmp[2] in ['0'..'9'] then
+      SitArr[j].TOfPloho := tmp[1] + tmp[2]
+    else
+      SitArr[j].TOfPloho := tmp[1];
+  end;
+  tmp := #0;
 
  ExlApp.Quit;
 
@@ -93,6 +147,11 @@ begin
   XLSFile := GetCurrentDir + '\kek.xlsx';
 
   Xls_Open(XLSFile, Memo1);
+
+  QuickSort( length(SitArr)-1, SitArr);
+  for i := 0 to length(SitArr) - 1 do
+    Memo1.Lines.Add( SitArr[i].City + ' ' + SitArr[i].TOfPloho );
+
 
   SetLength(Colorik,N-1);
   SetLength(MassOfStandart,N-1);
