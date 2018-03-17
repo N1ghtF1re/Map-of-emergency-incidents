@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
 Const
   n = 17;
-  kek = $FF*$5;
+  kek = $FF*$6;
   shift = kek div n;
 
 type
@@ -93,8 +93,8 @@ var
   deltaShift: Integer;
   colorT: TColorQueue;
 begin
-K.red := 255;
-K.green := 0;
+K.green := 255;
+K.red := 0;
 K.blue := 0;
 
 MassOfStandart[1].green := K.green;
