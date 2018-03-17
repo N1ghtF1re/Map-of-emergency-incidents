@@ -30,151 +30,81 @@ interface
 uses
   Windows, Graphics;
 
-var
-  HSLRange: integer = 240;
-
-  // convert a HSL value into a RGB in a TColor
-  // HSL values are 0.0 to 1.0 double
-function HSLtoRGB(H, S, L: double): TColor;
-
-// convert a HSL value into a RGB in a TColor
-// SL values are 0 to the HSLRange variable
-// H value is to HSLRange-1
-function HSLRangeToRGB(H, S, L: integer): TColor;
-
-// convert a RGB value (as TColor) into HSL
-// HSL values are 0.0 to 1.0 double
-procedure RGBtoHSL(RGB: TColor; var H, S, L: double);
-
-// convert a RGB value (as TColor) into HSL
-// SL values are 0 to the HSLRange variable
-// H value is to HSLRange-1
-procedure RGBtoHSLRange(RGB: TColor; var H, S, L: integer);
+// Получить цвет, темнее исходного на Percent процентов
+function DarkerColor(const Color : TColor; Percent : Integer) : TColor;
+// Получить цвет, светлее исходного на Percent процентов
+function LighterColor(const Color : TColor; Percent : Integer) : TColor;
+// Смешать несколько цветов и получить средний
+function MixColors(const Colors : array of TColor) : TColor;
+// Сделать цвет черно-белым
+function GrayColor(Color : TColor) : TColor;
 
 implementation
 
-function HSLtoRGB(H, S, L: double): TColor;
+function DarkerColor(const Color: TColor; Percent: Integer): TColor;
 var
-  M1, M2: double;
-
-  function HueToColourValue(Hue: double): byte;
-  var
-    V: double;
-  begin
-    if Hue < 0 then
-      Hue := Hue + 1
-    else if Hue > 1 then
-      Hue := Hue - 1;
-
-    if 6 * Hue < 1 then
-      V := M1 + (M2 - M1) * Hue * 6
-    else if 2 * Hue < 1 then
-      V := M2
-    else if 3 * Hue < 2 then
-      V := M1 + (M2 - M1) * (2 / 3 - Hue) * 6
-    else
-      V := M1;
-    Result := round(255 * V)
-  end;
-
-var
-  R, G, B: byte;
+  R, G, B: Byte;
 begin
-  if S = 0 then
-  begin
-    R := round(255 * L);
-    G := R;
-    B := R
-  end
-  else
-  begin
-    if L <= 0.5 then
-      M2 := L * (1 + S)
-    else
-      M2 := L + S - L * S;
-    M1 := 2 * L - M2;
-    R := HueToColourValue(H + 1 / 3);
-    G := HueToColourValue(H);
-    B := HueToColourValue(H - 1 / 3)
-  end;
-
-  Result := RGB(R, G, B)
+  Result := Color;
+  if Percent <= 0 then
+    Exit;
+  if Percent > 100 then
+    Percent := 100;
+  Result := ColorToRGB(Color);
+  R := GetRValue(Result);
+  G := GetGValue(Result);
+  B := GetBValue(Result);
+  R := R - R * Percent div 100;
+  G := G - G * Percent div 100;
+  B := B - B * Percent div 100;
+  Result := RGB(R, G, B);
 end;
 
-function HSLRangeToRGB(H, S, L: integer): TColor;
-begin
-  Result := HSLtoRGB(H / (HSLRange - 1), S / HSLRange, L / HSLRange)
-end;
-
-// Convert RGB value (0-255 range) into HSL value (0-1 values)
-
-procedure RGBtoHSL(RGB: TColor; var H, S, L: double);
-
-  function Max(a, B: double): double;
-  begin
-    if a > B then
-      Result := a
-    else
-      Result := B
-  end;
-
-  function Min(a, B: double): double;
-  begin
-    if a < B then
-      Result := a
-    else
-      Result := B
-  end;
-
+function LighterColor(const Color: TColor; Percent: Integer): TColor;
 var
-  R, G, B, D, Cmax, Cmin: double;
+  R, G, B: Byte;
 begin
-  R := GetRValue(RGB) / 255;
-  G := GetGValue(RGB) / 255;
-  B := GetBValue(RGB) / 255;
-  Cmax := Max(R, Max(G, B));
-  Cmin := Min(R, Min(G, B));
-
-  // calculate luminosity
-  L := (Cmax + Cmin) / 2;
-
-  if Cmax = Cmin then // it's grey
-  begin
-    H := 0; // it's actually undefined
-    S := 0
-  end
-  else
-  begin
-    D := Cmax - Cmin;
-
-    // calculate Saturation
-    if L < 0.5 then
-      S := D / (Cmax + Cmin)
-    else
-      S := D / (2 - Cmax - Cmin);
-
-    // calculate Hue
-    if R = Cmax then
-      H := (G - B) / D
-    else if G = Cmax then
-      H := 2 + (B - R) / D
-    else
-      H := 4 + (R - G) / D;
-
-    H := H / 6;
-    if H < 0 then
-      H := H + 1
-  end
+  Result := Color;
+  if Percent <= 0 then
+    Exit;
+  if Percent > 100 then
+    Percent := 100;
+  Result := ColorToRGB(Result);
+  R := GetRValue(Result);
+  G := GetGValue(Result);
+  B := GetBValue(Result);
+  R := R + (255 - R) * Percent div 100;
+  G := G + (255 - G) * Percent div 100;
+  B := B + (255 - B) * Percent div 100;
+  Result := RGB(R, G, B);
 end;
 
-procedure RGBtoHSLRange(RGB: TColor; var H, S, L: integer);
+function MixColors(const Colors: array of TColor): TColor;
 var
-  Hd, Sd, Ld: double;
+  R, G, B: Integer;
+  i: Integer;
+  L: Integer;
 begin
-  RGBtoHSL(RGB, Hd, Sd, Ld);
-  H := round(Hd * (HSLRange - 1));
-  S := round(Sd * HSLRange);
-  L := round(Ld * HSLRange);
+  R := 0;
+  G := 0;
+  B := 0;
+  for i := Low(Colors) to High(Colors) do
+  begin
+    Result := ColorToRGB(Colors[i]);
+    R := R + GetRValue(Result);
+    G := G + GetGValue(Result);
+    B := B + GetBValue(Result);
+  end;
+  L := Length(Colors);
+  Result := RGB(R div L, G div L, B div L);
 end;
 
+function GrayColor(Color: TColor): TColor;
+var
+  Gray: Byte;
+begin
+  Result := ColorToRGB(Color);
+  Gray := (GetRValue(Result) + GetGValue(Result) + GetBValue(Result)) div 3;
+  Result := RGB(Gray, Gray, Gray);
+end;
 end.

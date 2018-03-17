@@ -169,7 +169,9 @@ var
   i:integer;
   H,S,L: double;
   r,g,b: integer;
-  sum: integer;
+  sum: LongInt;
+  Col: TColor;
+  Colorik: array[0..N-1] of TColor;
 begin
   r:=0;
   g:=0;
@@ -178,7 +180,7 @@ begin
   creatingBasicColors;
   for i := 1 to n do
   begin
-    RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
+    //RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
     //Image1.Canvas.TextOut(i*20, i*20 + 300, FloatToStr(H) + ' ' +  FloatToStr(S) + ' '+ FloatToStr(l));
 
     Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
@@ -188,31 +190,29 @@ begin
     b:= MassOfStandart[i].blue;
 
     L := 0.75;
-    Image1.Canvas.Brush.Color := HSLtoRGB(H,S,L);
+    Col:= RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
+    Image1.Canvas.Brush.Color := LighterColor( Col, 67);
     Image1.Canvas.Rectangle(0+i*20,200,i*20 + 20,400);
+    //Colorik[i-1] := LighterColor( Col, 67);
 
 
-    L := 0.95;
-    Image1.Canvas.Brush.Color := HSLtoRGB(H,S,L);
+    Image1.Canvas.Brush.Color := GrayColor(Col);
     Image1.Canvas.Rectangle(0+i*20,400,i*20 + 20,600);
 
-    sum := HSLtoRGB(H,S,L);
+    {L := 0.95;
+    Image1.Canvas.Brush.Color :=
+    Image1.Canvas.Rectangle(0+i*20,400,i*20 + 20,600); }
 
-    r := sum;
-    g := sum shr 8;
-    b := sum shr 16;
 
+    //ShowMessage( IntToStr(r) + ' ' + IntToStr(G)+ ' ' + IntToStr(B) );
     image1.Canvas.Brush.Color := clwhite;
     //Image1.Canvas.TextOut(i*20, i*20 + 300, IntToStr(MassOfStandart[i].red) + ' ' +  IntToStr(MassOfStandart[i].green) + ' '+ IntToStr(MassOfStandart[i].blue));
 
   end;
-  r:= r div N;
-  g:= g div N;
-  b:= b div N;
+
 
   sum := sum div N;
-
-  Image1.Canvas.Brush.Color := sum;
+  Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
 end;
 
