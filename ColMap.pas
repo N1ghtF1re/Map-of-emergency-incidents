@@ -173,6 +173,7 @@ begin
       Rec := MassOfStandart[SitArr[i].TOfPloho-1];
       HexCol := rgb(Rec.green, Rec.red, Rec.blue);
       Colorik.add(IntToStr( HexCol));
+      Memo1.Lines.Add(Colorik[currN]);
       inc(currN);
     end;
   end;

@@ -3,18 +3,21 @@ unit HSLUtils;
 interface
 
 uses
-  Windows, Graphics;
+  Windows, Graphics,System.Classes;
 
 // Получить цвет, темнее исходного на Percent процентов
 function DarkerColor(const Color : TColor; Percent : Integer) : TColor;
 // Получить цвет, светлее исходного на Percent процентов
 function LighterColor(const Color : TColor; Percent : Integer) : TColor;
 // Смешать несколько цветов и получить средний
-function MixColors(const Colors : array of TColor) : TColor;
+function MixColors(Colors: TStringList{array of TColor}): TColor;
 // Сделать цвет черно-белым
 function GrayColor(Color : TColor) : TColor;
 
 implementation
+
+uses
+  System.SysUtils;
 
 function DarkerColor(const Color: TColor; Percent: Integer): TColor;
 var
@@ -54,7 +57,7 @@ begin
   Result := RGB(R, G, B);
 end;
 
-function MixColors(const Colors: array of TColor): TColor;
+function MixColors(Colors: TStringList{array of TColor}): TColor;
 var
   R, G, B: Integer;
   i: Integer;
@@ -63,14 +66,14 @@ begin
   R := 0;
   G := 0;
   B := 0;
-  for i := Low(Colors) to High(Colors) do
+  for i := 0 to Colors.Count-1 do
   begin
-    Result := ColorToRGB(Colors[i]);
+    Result := ColorToRGB(TColor(StrToInt(Colors[i])) );
     R := R + GetRValue(Result);
     G := G + GetGValue(Result);
     B := B + GetBValue(Result);
   end;
-  L := Length(Colors);
+  L := Colors.Count;
   Result := RGB(R div L, G div L, B div L);
 end;
 
