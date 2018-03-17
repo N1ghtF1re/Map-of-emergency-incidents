@@ -111,7 +111,7 @@ begin
     SI:= 57+26;
     CI:=1;
 
-    SitArr[j].City := sheet.cells[j, CI];
+    SitArr[j-2].City := sheet.cells[j, CI];
     tmp := sheet.cells[j, SI];
 
     if tmp[2] in ['0'..'9'] then
