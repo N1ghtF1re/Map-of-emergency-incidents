@@ -1,28 +1,3 @@
-// ------------------------------------------------------------------------------
-//
-// HSL - RGB colour model conversions
-//
-// These four functions can be used to convert between the RGB and HSL colour
-// models.  RGB values are represented using the 0-255 Windows convention and
-// always encapsulated in a TColor 32 bit value.  HSL values are available as
-// either 0 to 1 floating point (double) values or as a 0 to a defined integer
-// value.  The colour common dialog box uses 0 to 240 by example.
-//
-// The code is based on that found (in C) on:
-//
-// http:/www.r2m.com/win-developer-faq/graphics/8.html
-//
-// Grahame Marsh 12 October 1997
-//
-// Freeware - you get it for free, I take nothing, I make no promises!
-//
-// Please feel free to contact me: grahame.s.marsh@corp.courtaulds.co.uk
-//
-// Revison History:
-// Version 1.00 - initial release  12-10-1997
-//
-// ------------------------------------------------------------------------------
-
 unit HSLUtils;
 
 interface
