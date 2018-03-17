@@ -14,7 +14,7 @@ type
 
   TSituationRec = Record
     City: string[40];
-    TOfPloho: string[2];
+    TOfPloho: integer;
   end;
   TSitArr = array of TSituationRec;
 
@@ -113,9 +113,9 @@ begin
     tmp := sheet.cells[j, SI];
 
     if tmp[2] in ['0'..'9'] then
-      SitArr[j].TOfPloho := tmp[1] + tmp[2]
+      SitArr[j].TOfPloho := StrToInt( tmp[1] + tmp[2] )
     else
-      SitArr[j].TOfPloho := tmp[1];
+      SitArr[j].TOfPloho := StrToInt(tmp[1]);
   end;
   tmp := #0;
 
@@ -134,8 +134,10 @@ var
   r,g,b: integer;
   sum: LongInt;
   Col: TColor;
-  Colorik: array of TColor;
+  Colorik: array[0..2000] of TColor;
   XLSFile: string;
+  currN:integer;
+  Rec: TRecordCust;
 begin
   r:=0;
   g:=0;
@@ -148,16 +150,27 @@ begin
 
   Xls_Open(XLSFile, Memo1);
 
-  QuickSort( length(SitArr)-1, SitArr);
-  {for i := 0 to length(SitArr) - 1 do
-    Memo1.Lines.Add( SitArr[i].City + ' ' + SitArr[i].TOfPloho );}
+  //Memo1.Lines.Add( SitArr[i].City + ' ' + SitArr[i].TOfPloho );
 
 
-  SetLength(Colorik,N-1);
+  //SetLength(Colorik,N-1);
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
 
   creatingBasicColors(MassOfStandart, N, shift);
+
+  currN := 0;
+  QuickSort( length(SitArr)-1, SitArr);
+  for i := 0 to length(SitArr) - 1 do
+  begin
+    if SitArr[i].City = 'Воложинский район' then
+    begin
+      //ShowMessage(IntToStr(SitArr[i].TOfPloho-1));
+      Rec := MassOfStandart[SitArr[i].TOfPloho-1];
+      Colorik[currN] := rgb(Rec.green, Rec.red, Rec.blue);
+      inc(currN);
+    end;
+  end;
   for i := 1 to n do
   begin
     //RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
