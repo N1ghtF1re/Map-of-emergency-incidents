@@ -115,9 +115,9 @@ begin
     tmp := sheet.cells[j, SI];
 
     if tmp[2] in ['0'..'9'] then
-      SitArr[j].TOfPloho := StrToInt( tmp[1] + tmp[2] )
+      SitArr[j-2].TOfPloho := StrToInt( tmp[1] + tmp[2] )
     else
-      SitArr[j].TOfPloho := StrToInt(tmp[1]);
+      SitArr[j-2].TOfPloho := StrToInt(tmp[1]);
   end;
   tmp := #0;
 
@@ -149,8 +149,7 @@ begin
       A[j]:=0;
     end;
 
-    while
-    sitarr[i].city = tmpcity do
+    while sitarr[i].city = tmpcity do
     begin
     Inc(A[SitArr[i].TOfPloho]);
     end;
