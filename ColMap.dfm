@@ -20,4 +20,17 @@ object Form1: TForm1
     Width = 697
     Height = 561
   end
+  object Memo1: TMemo
+    Left = 432
+    Top = 176
+    Width = 249
+    Height = 361
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 0
+  end
+  object dlgOpen: TOpenDialog
+    Left = 376
+    Top = 256
+  end
 end

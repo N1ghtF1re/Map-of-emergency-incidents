@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.636,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\coloringMap\Map-of-emergency-incidents\ColMap.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.524,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.875,=C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.636,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\coloringMap\Map-of-emergency-incidents\ColMap.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.095,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\coloringMap\Map-of-emergency-incidents\ColoringMap.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.636,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\coloringMap\Map-of-emergency-incidents\ColMap.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.636,C:\Users\Win10\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\coloringMap\Map-of-emergency-incidents\ColMap.dfm</Transaction>
     <Transaction>2018.03.17 19:09:45.256,=D:\coloringMap\Map-of-emergency-incidents\Unit1.pas</Transaction>
     <Transaction>2018.03.17 19:10:04.707,D:\coloringMap\Map-of-emergency-incidents\HSLUtils.pas=D:\coloringMap\Map-of-emergency-incidents\Unit1.pas</Transaction>
+    <Transaction>2018.03.17 20:28:39.072,=D:\coloringMap\Map-of-emergency-incidents\Unit1.pas</Transaction>
+    <Transaction>2018.03.17 21:12:10.040,D:\coloringMap\Map-of-emergency-incidents\CreateBasicColors.pas=D:\coloringMap\Map-of-emergency-incidents\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

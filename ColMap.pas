@@ -4,21 +4,24 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils, Vcl.StdCtrls, ComObj, CreateBasicColors;
 Const
 //  n = 17;
   kek = trunc(255*5.78);
 //  shift = kek div n;
 
 type
-  TColorQueue = (green, red, blue);
-  TRecordCust = record
-  green,red,blue:Integer;
+
+  TSituationRec = Record
+    City: string[40];
+    TOfPloho: string[2];
   end;
 
 
   TForm1 = class(TForm)
     Image1: TImage;
+    Memo1: TMemo;
+    dlgOpen: TOpenDialog;
     procedure FormCreate(Sender: TObject);
 
   private
@@ -36,133 +39,47 @@ implementation
 
 {$R *.dfm}
 
-procedure Succa(var Clr: TColorQueue);
-begin
-clr := succ(clr);
-if( ord(Clr) > 2 ) then
-Clr := green;
-end;
-
-procedure SuccBool(var boolTemp:Boolean);
-begin
-if boolTemp then
-  boolTemp := False
-else
-  boolTemp := True;
-end;
-
-function LessThen255(ColorT: TColorQueue; var K: TRecordCust): boolean;
-begin
-case ColorT of
-blue: Result:= K.blue < 255;
-green: Result:= K.green < 255;
-red: Result:= K.red < 255
-end;
-end;
-
-function MoreThen0(ColorT: TColorQueue; K: TRecordCust): boolean;
-begin
-case ColorT of
-blue: Result:= K.blue > 0;
-green: Result:= K.green > 0;
-red: Result:= K.red > 0
-end;
-end;
-
-procedure IncKColorT(ColorT: TColorQueue; var K: TRecordCust);
-begin
-case ColorT of
-blue: Inc(K.blue);
-green: Inc(K.green);
-red: Inc(K.red);
-end;
-end;
-
-procedure DecKColorT(ColorT: TColorQueue; var K: TRecordCust);
-begin
-case ColorT of
-blue: Dec(K.blue);
-green: Dec(K.green);
-red: Dec(K.red);
-end;
-end;
-
-procedure creatingBasicColors(var MassOfStandart: array of TRecordCust; var N:integer; shift: Integer);
+procedure Xls_Open(XLSFile:string; Memo: TMemo);
+ const
+  xlCellTypeLastCell = $0000000B;
 var
-  trg_plus, exitbool: Boolean;
-  i:Byte;
-  deltaShift: Integer;
-  colorT: TColorQueue;
-  K: TRecordCust;
+  ExlApp, Sheet: OLEVariant;
+  i, j, r, c:integer;
+
 begin
-K.red := 255;
-K.green := 0;
-K.blue := 0;
+  //создаем объект Excel
+  ExlApp := CreateOleObject('Excel.Application');
 
-MassOfStandart[1].green := K.green;
-MassOfStandart[1].red := K.red;
-MassOfStandart[1].blue := K.blue;
+  //делаем окно Excel невидимым
+  ExlApp.Visible := false;
 
-trg_plus := true;
-colorT := green;
+  //открываем файл XLSFile
+  ExlApp.Workbooks.Open(XLSFile);
 
-for i:=2 to N do
-begin
-	exitbool := false;
-	deltaShift := shift;
-	while not(exitbool) do
-	begin
-		case trg_plus of
-		true:
-			begin
-			while LessThen255(colorT, K) and (deltaShift <> 0) do
-				begin
-				IncKColorT(colorT, K);
-				dec(deltaShift);
-				end;
-			end
-		else
-			begin
-			while MoreThen0(colorT, K) and (deltaShift <> 0) do
-				begin
-				DecKColorT(colorT, K);
-				dec(deltaShift);
-				end;
-			end;
-    end;
+  //создаем объект Sheet(страница) и указываем номер листа (1)
+  //в книге, с которого будем осуществл€ть чтение
+  Sheet := ExlApp.Workbooks[ExtractFileName(XLSFile)].WorkSheets[1];
 
-		if (deltaShift = 0) then
-			begin
-			MassOfStandart[i].green := K.green;
-			MassOfStandart[i].red := K.red;
-			MassOfStandart[i].blue := K.blue;
-			exitbool:=true;
-			end
-		else
-			begin
-			Succbool(trg_plus);
-			SuccA(colorT);
-			end;
-	end;
+  //активируем последнюю €чейку на листе
+  Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
+
+    r := ExlApp.ActiveCell.Row;
+
+     for j:= 1 to r do
+     begin
+         i:= 57+26;
+         Memo.Lines.Add(sheet.cells[j,i]);
+     end;
+
+
+ //закрываем приложение Excel
+ ExlApp.Quit;
+
+ //очищаем выделенную пам€ть
+ ExlApp := Unassigned;
+ Sheet := Unassigned;
+
 end;
-end;
-
-function max(el1, el2: Variant):variant;
-begin
-  if el1 > el2 then
-    result := el1
-  else
-    Result := el2
-end;
-
-function min(el1, el2: Variant):variant;
-begin
-  if el1 < el2 then
-    result := el1
-  else
-    Result := el2
-end;
-
 
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -173,12 +90,18 @@ var
   sum: LongInt;
   Col: TColor;
   Colorik: array of TColor;
+  XLSFile: string;
 begin
   r:=0;
   g:=0;
   b:=0;
 
   N:=17;  // CHANGE PLS!!!!!!!!!!!
+
+  if dlgOpen.Execute then
+     XLSFile := dlgOpen.FileName;
+  Xls_Open(XLSFile, Memo1);
+
   SetLength(Colorik,N-1);
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
@@ -223,3 +146,4 @@ begin
 end;
 
 end.
+
