@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
 Const
   n = 17;
-  kek = trunc(255*5.78);
+  kek = $FF*$5;
   shift = kek div n;
 
 type
