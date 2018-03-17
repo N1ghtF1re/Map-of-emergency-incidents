@@ -6,9 +6,9 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils;
 Const
-  n = 17;
+//  n = 17;
   kek = trunc(255*5.78);
-  shift = kek div n;
+//  shift = kek div n;
 
 type
   TColorQueue = (green, red, blue);
@@ -29,8 +29,8 @@ type
 
 var
   Form1: TForm1;
-  MassOfStandart: array[1..N] of TRecordCust;
-  K: TRecordCust;
+  MassOfStandart: array of TRecordCust;
+  N,shift:Integer;
 
 implementation
 
@@ -51,7 +51,7 @@ else
   boolTemp := True;
 end;
 
-function LessThen255(ColorT: TColorQueue): boolean;
+function LessThen255(ColorT: TColorQueue; var K: TRecordCust): boolean;
 begin
 case ColorT of
 blue: Result:= K.blue < 255;
@@ -60,7 +60,7 @@ red: Result:= K.red < 255
 end;
 end;
 
-function MoreThen0(ColorT: TColorQueue): boolean;
+function MoreThen0(ColorT: TColorQueue; K: TRecordCust): boolean;
 begin
 case ColorT of
 blue: Result:= K.blue > 0;
@@ -69,7 +69,7 @@ red: Result:= K.red > 0
 end;
 end;
 
-procedure IncKColorT(ColorT: TColorQueue);
+procedure IncKColorT(ColorT: TColorQueue; var K: TRecordCust);
 begin
 case ColorT of
 blue: Inc(K.blue);
@@ -78,7 +78,7 @@ red: Inc(K.red);
 end;
 end;
 
-procedure DecKColorT(ColorT: TColorQueue);
+procedure DecKColorT(ColorT: TColorQueue; var K: TRecordCust);
 begin
 case ColorT of
 blue: Dec(K.blue);
@@ -87,12 +87,13 @@ red: Dec(K.red);
 end;
 end;
 
-procedure creatingBasicColors();
+procedure creatingBasicColors(var MassOfStandart: array of TRecordCust; var N:integer; shift: Integer);
 var
   trg_plus, exitbool: Boolean;
   i:Byte;
   deltaShift: Integer;
   colorT: TColorQueue;
+  K: TRecordCust;
 begin
 K.red := 255;
 K.green := 0;
@@ -114,17 +115,17 @@ begin
 		case trg_plus of
 		true:
 			begin
-			while LessThen255(colorT) and (deltaShift <> 0) do
+			while LessThen255(colorT, K) and (deltaShift <> 0) do
 				begin
-				IncKColorT(colorT);
+				IncKColorT(colorT, K);
 				dec(deltaShift);
 				end;
 			end
 		else
 			begin
-			while MoreThen0(colorT) and (deltaShift <> 0) do
+			while MoreThen0(colorT, K) and (deltaShift <> 0) do
 				begin
-				DecKColorT(colorT);
+				DecKColorT(colorT, K);
 				dec(deltaShift);
 				end;
 			end;
@@ -171,13 +172,18 @@ var
   r,g,b: integer;
   sum: LongInt;
   Col: TColor;
-  Colorik: array[0..N-1] of TColor;
+  Colorik: array of TColor;
 begin
   r:=0;
   g:=0;
   b:=0;
 
-  creatingBasicColors;
+  N:=17;  // CHANGE PLS!!!!!!!!!!!
+  SetLength(Colorik,N-1);
+  SetLength(MassOfStandart,N-1);
+  shift := kek div n;
+
+  creatingBasicColors(MassOfStandart, N, shift);
   for i := 1 to n do
   begin
     //RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
