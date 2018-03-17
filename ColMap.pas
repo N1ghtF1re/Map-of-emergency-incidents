@@ -47,20 +47,14 @@ var
   i, j, r, c:integer;
 
 begin
-  //создаем объект Excel
   ExlApp := CreateOleObject('Excel.Application');
 
-  //делаем окно Excel невидимым
   ExlApp.Visible := false;
 
-  //открываем файл XLSFile
   ExlApp.Workbooks.Open(XLSFile);
 
-  //создаем объект Sheet(страница) и указываем номер листа (1)
-  //в книге, с которого будем осуществл€ть чтение
   Sheet := ExlApp.Workbooks[ExtractFileName(XLSFile)].WorkSheets[1];
 
-  //активируем последнюю €чейку на листе
   Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
     r := ExlApp.ActiveCell.Row;
@@ -71,11 +65,8 @@ begin
          Memo.Lines.Add(sheet.cells[j,i]);
      end;
 
-
- //закрываем приложение Excel
  ExlApp.Quit;
 
- //очищаем выделенную пам€ть
  ExlApp := Unassigned;
  Sheet := Unassigned;
 
