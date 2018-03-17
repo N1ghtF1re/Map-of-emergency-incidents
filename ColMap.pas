@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils;
 Const
   n = 17;
   kek = trunc(255*5.78);
@@ -20,6 +20,7 @@ type
   TForm1 = class(TForm)
     Image1: TImage;
     procedure FormCreate(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -145,19 +146,74 @@ begin
 end;
 end;
 
+function max(el1, el2: Variant):variant;
+begin
+  if el1 > el2 then
+    result := el1
+  else
+    Result := el2
+end;
+
+function min(el1, el2: Variant):variant;
+begin
+  if el1 < el2 then
+    result := el1
+  else
+    Result := el2
+end;
+
+
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   i:integer;
+  H,S,L: double;
+  r,g,b: integer;
+  sum: integer;
 begin
+  r:=0;
+  g:=0;
+  b:=0;
+
   creatingBasicColors;
   for i := 1 to n do
   begin
+    RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
+    //Image1.Canvas.TextOut(i*20, i*20 + 300, FloatToStr(H) + ' ' +  FloatToStr(S) + ' '+ FloatToStr(l));
+
     Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
     Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
+    r:= MassOfStandart[i].red;
+    g:= MassOfStandart[i].green;
+    b:= MassOfStandart[i].blue;
+
+    L := 0.75;
+    Image1.Canvas.Brush.Color := HSLtoRGB(H,S,L);
+    Image1.Canvas.Rectangle(0+i*20,200,i*20 + 20,400);
+
+
+    L := 0.95;
+    Image1.Canvas.Brush.Color := HSLtoRGB(H,S,L);
+    Image1.Canvas.Rectangle(0+i*20,400,i*20 + 20,600);
+
+    sum := HSLtoRGB(H,S,L);
+
+    r := sum;
+    g := sum shr 8;
+    b := sum shr 16;
+
     image1.Canvas.Brush.Color := clwhite;
-    Image1.Canvas.TextOut(i*20, i*20 + 300, IntToStr(MassOfStandart[i].red) + ' ' +  IntToStr(MassOfStandart[i].green) + ' '+ IntToStr(MassOfStandart[i].blue));
+    //Image1.Canvas.TextOut(i*20, i*20 + 300, IntToStr(MassOfStandart[i].red) + ' ' +  IntToStr(MassOfStandart[i].green) + ' '+ IntToStr(MassOfStandart[i].blue));
 
   end;
+  r:= r div N;
+  g:= g div N;
+  b:= b div N;
+
+  sum := sum div N;
+
+  Image1.Canvas.Brush.Color := sum;
+  Image1.Canvas.Rectangle(20,600,200,800);
 end;
 
 end.
