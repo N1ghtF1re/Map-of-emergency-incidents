@@ -4,9 +4,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
 Const
-  n = 7;
+  n = 17;
   kek = $FF*$6;
   shift = kek div n;
 
@@ -18,6 +18,8 @@ type
 
 
   TForm1 = class(TForm)
+    Image1: TImage;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -137,6 +139,21 @@ begin
 			end;
 	end;
 end;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+var
+  i:integer;
+begin
+  creatingBasicColors;
+  for i := 1 to n do
+  begin
+    Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
+    Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
+    image1.Canvas.Brush.Color := clwhite;
+    Image1.Canvas.TextOut(i*20, i*20 + 300, IntToStr(MassOfStandart[i].red) + ' ' +  IntToStr(MassOfStandart[i].green) + ' '+ IntToStr(MassOfStandart[i].blue));
+
+  end;
 end;
 
 end.
