@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils, Vcl.StdCtrls, ComObj, CreateBasicColors;
+  Vcl.Controls, Vcl.Forms,pngimage, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils,SplashScreen, Vcl.StdCtrls, ComObj, CreateBasicColors;
 Const
 //  n = 17;
   kek = trunc(255*5.78);
@@ -22,6 +22,7 @@ type
     Image1: TImage;
     Memo1: TMemo;
     dlgOpen: TOpenDialog;
+    introIMG: TImage;
     procedure FormCreate(Sender: TObject);
 
   private
@@ -35,6 +36,7 @@ var
   MassOfStandart: array of TRecordCust;
   N,shift:Integer;
   SitArr: TSitArr;
+  splash: TSplash;
 
 implementation
 
@@ -139,7 +141,15 @@ var
   currN:integer;
   Rec: TRecordCust;
   HexCol : Cardinal;
+  flag: boolean;
+  png: TPngImage;
 begin
+  // SPLASH SCREEN4iK
+  png:= TPngImage(introIMG.Picture);
+  Splash := TSplash.Create(png);
+  Splash.Show(true);
+
+
   r:=0;
   g:=0;
   b:=0;
@@ -165,17 +175,21 @@ begin
 
   Colorik := TStringList.Create;
 
+  flag := false;
   for i := 0 to length(SitArr) - 1 do
   begin
     if SitArr[i].City = 'Воложинский район' then
     begin
+      flag := true;
       //ShowMessage(IntToStr(SitArr[i].TOfPloho-1));
       Rec := MassOfStandart[SitArr[i].TOfPloho-1];
       HexCol := rgb(Rec.green, Rec.red, Rec.blue);
       Colorik.add(IntToStr( HexCol));
       Memo1.Lines.Add(Colorik[currN]);
       inc(currN);
-    end;
+    end
+    else if flag then
+      break;
   end;
   for i := 1 to n do
   begin
@@ -213,6 +227,7 @@ begin
   sum := sum div N;
   Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
+  Splash.Close;
 end;
 
 end.

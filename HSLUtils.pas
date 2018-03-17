@@ -68,7 +68,7 @@ begin
   B := 0;
   for i := 0 to Colors.Count-1 do
   begin
-    Result := ColorToRGB(TColor(StrToInt(Colors[i])) );
+    Result := ColorToRGB( TColor(StrToInt(Colors[i])) );
     R := R + GetRValue(Result);
     G := G + GetGValue(Result);
     B := B + GetBValue(Result);
