@@ -9,7 +9,6 @@ Const
 //  n = 17;
   kek = trunc(255*5.78);
 //  shift = kek div n;
-
 type
 
   TSituationRec = Record
@@ -37,6 +36,7 @@ var
   N,shift:Integer;
   SitArr: TSitArr;
   splash: TSplash;
+  maxVal: integer;
 
 implementation
 
@@ -128,6 +128,43 @@ begin
 
 end;
 
+function max(a,b:Integer):Integer;
+begin
+  if A>b then
+    result:=a
+    else
+    result:=b;
+end;
+function GetMaxVal(sitarr:TSitArr):Integer;
+var
+  tmpcity:string;
+  A:array [1..19]  of Integer;
+  i,prmax,currmax,j:Integer;
+begin
+  tmpcity:=sitarr[1].city;
+  for i:= 0 to length(SitArr) - 1 do
+  begin
+  for j := 1 to 19 do
+    begin
+      A[j]:=0;
+    end;
+
+    while
+    sitarr[i].city = tmpcity do
+    begin
+    Inc(A[SitArr[i].TOfPloho]);
+    end;
+   currmax:=A[1];
+   for j:=1 to 19 do
+   begin
+     if currmax<A[j] then
+     Currmax:=A[j];
+   end;
+   tmpcity:=sitarr[i].city;
+   result:=max(prmax,currmax);
+  end;
+end;
+
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
@@ -147,8 +184,7 @@ begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
   Splash := TSplash.Create(png);
-  Splash.Show(true);
-
+  //Splash.Show(true);
 
   r:=0;
   g:=0;
@@ -174,6 +210,8 @@ begin
   QuickSort( length(SitArr)-1, SitArr);
 
   Colorik := TStringList.Create;
+
+  maxVal := GetMaxVal(SitArr); // Максимальное значение происшествий в городе
 
   flag := false;
   for i := 0 to length(SitArr) - 1 do
@@ -227,7 +265,7 @@ begin
   sum := sum div N;
   Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
-  Splash.Close;
+  //Splash.Close;
 end;
 
 end.
