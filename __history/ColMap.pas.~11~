@@ -6,9 +6,9 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils;
 Const
-//  n = 17;
+  n = 17;
   kek = trunc(255*5.78);
-//  shift = kek div n;
+  shift = kek div n;
 
 type
   TColorQueue = (green, red, blue);
@@ -29,8 +29,8 @@ type
 
 var
   Form1: TForm1;
-  MassOfStandart: array of TRecordCust;
-  N,shift:Integer;
+  MassOfStandart: array[1..N] of TRecordCust;
+
 
 implementation
 
@@ -87,7 +87,7 @@ red: Dec(K.red);
 end;
 end;
 
-procedure creatingBasicColors(var MassOfStandart: array of TRecordCust; var N:integer; shift: Integer);
+procedure creatingBasicColors(var MassOfStandart: array of TRecordCust);
 var
   trg_plus, exitbool: Boolean;
   i:Byte;
@@ -99,14 +99,14 @@ K.red := 255;
 K.green := 0;
 K.blue := 0;
 
-MassOfStandart[1].green := K.green;
-MassOfStandart[1].red := K.red;
-MassOfStandart[1].blue := K.blue;
+MassOfStandart[0].green := K.green;
+MassOfStandart[0].red := K.red;
+MassOfStandart[0].blue := K.blue;
 
 trg_plus := true;
 colorT := green;
 
-for i:=2 to N do
+for i:=1 to N-1 do
 begin
 	exitbool := false;
 	deltaShift := shift;
@@ -172,18 +172,13 @@ var
   r,g,b: integer;
   sum: LongInt;
   Col: TColor;
-  Colorik: array of TColor;
+  Colorik: array[0..N-1] of TColor;
 begin
   r:=0;
   g:=0;
   b:=0;
 
-  N:=17;  // CHANGE PLS!!!!!!!!!!!
-  SetLength(Colorik,N-1);
-  SetLength(MassOfStandart,N-1);
-  shift := kek div n;
-
-  creatingBasicColors(MassOfStandart, N, shift);
+  creatingBasicColors(MassOfStandart);
   for i := 1 to n do
   begin
     //RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
