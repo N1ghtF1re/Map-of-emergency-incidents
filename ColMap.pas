@@ -162,39 +162,42 @@ begin
   Splash.Show(true);
 
 
-  CreateCityList(CityHead);
+  try
+    CreateCityList(CityHead);
 
-  N:=19;  // CHANGE PLS!!!!!!!!!!!
+    N:=19;  // CHANGE PLS!!!!!!!!!!!
 
-  XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
+    XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
-  Xls_Open(XLSFile, CityHead);
+    Xls_Open(XLSFile, CityHead);
 
-  SetLength(MassOfStandart,N-1);
-  shift := kek div n;
+    SetLength(MassOfStandart,N-1);
+    shift := kek div n;
 
-  creatingBasicColors(MassOfStandart, N, shift);
+    creatingBasicColors(MassOfStandart, N, shift);
 
-  // QuickSort( length(SitArr)-1, SitArr);
-
-
-  //maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
-
-  GetMaxVal(CityHead, MaxArr, N);
-  //MaxVal := maxWithArr(MaxArr);
-  FillMap(CityHead, Colorik, {MaxVal}MaxArr, Memo1, Image1.Canvas);
+    // QuickSort( length(SitArr)-1, SitArr);
 
 
-  for i := 1 to n do
-  begin
-    // Отрисовка основных цветов
-    Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
-    Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,20);
- end;
+    //maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
 
-  //Image1.Canvas.Brush.Color := MixColors(Colorik);
-  //Image1.Canvas.Rectangle(20,600,200,800);
-  Splash.Close;
+    GetMaxVal(CityHead, MaxArr, N);
+    //MaxVal := maxWithArr(MaxArr);
+    FillMap(CityHead, Colorik, {MaxVal}MaxArr, Memo1, Image1.Canvas);
+
+    for i := 1 to n do
+    begin
+      // Отрисовка основных цветов
+      Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
+      Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,20);
+   end;
+
+    //Image1.Canvas.Brush.Color := MixColors(Colorik);
+    //Image1.Canvas.Rectangle(20,600,200,800);
+  finally
+    Splash.Close;
+  end;
+
 end;
 
 end.
