@@ -18,7 +18,7 @@ type
     dlgOpen: TOpenDialog;
     introIMG: TImage;
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
 
   private
     { Private declarations }
@@ -148,6 +148,17 @@ begin
   result := max;
 end;
 
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+var now:TDateTime;
+var f: file of TDateTime;
+begin
+saveKek(CityHead,'kek.brakh');
+Assignfile(f,'ReadTimeModified.brakh');
+Rewrite(f);
+now:=time;
+write(f,now);
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 
 var
@@ -156,8 +167,9 @@ var
   png: TPngImage;
   Colorik:TColorArr;
   maxVal: integer;
-  f:file of TDateTime;
+  f: file of TDateTime;
   Readtime,filelife:TDateTime;
+  now:TDateTime; ///delete
 begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
@@ -179,7 +191,9 @@ begin
       reset(f)
     else
       rewrite(f); // pomenyat' na reset
-    if not EOF(f) then read(Readtime);
+   // if not EOF(f) then
+
+  read(f,Readtime);
     if ((Readtime-Filelife)>0) then
     begin
     XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
@@ -217,15 +231,7 @@ begin
 
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
-var now:TDateTime;
-var f: file of TDateTime;
-begin
-Assignfile(f,'ReadTimeModified.brakh');
-Reset(f);
-now:=time;
-write(f,now);
-end;
+
 
 end.
 

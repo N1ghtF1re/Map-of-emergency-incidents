@@ -92,7 +92,7 @@ end;
      end
      else
      begin
-       Rewrite(f);
+       //Rewrite(f);
        ShowMessage('No such file or directiory');
        readLol(Head,'kek.brakh');
      end;
