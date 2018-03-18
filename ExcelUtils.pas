@@ -18,6 +18,9 @@ uses
  System.SysUtils, System.Variants, System.Classes,
  ComObj,vcl.dialogs;
 
+
+
+
 procedure Xls_Open(XLSFile:string; var head: PCityList);
  const
   xlCellTypeLastCell = $0000000B;

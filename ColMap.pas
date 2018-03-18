@@ -33,7 +33,7 @@ var
   splash: TSplash;
   maxVal: integer;
   CityHead: PCityList;
-
+  MaxArr: TSituationArr;
 implementation
 
 {$R *.dfm}
@@ -46,49 +46,29 @@ begin
     result:=b;
 end;
 
-procedure nulledArr(size: integer;var Arr: array of Integer);
-var i:integer;
-begin
-  for i := Low(arr) to High(arr) do
-    Arr[i] := 0;
-end;
-
-function GetMaxVal(sitarr:TSitArr; const N: integer):Integer;
+procedure GetMaxVal(head: PCityList; var MaxArr: TSituationArr; const N: integer);
 var
-  tmpcity:string;
-  A:array [1..19]  of Integer;
-  i,prmax,currmax:Integer;
-
-procedure getM(var currmax: integer;const N:integer;var A: array of integer);
-var i:integer;
+  i,j: integer;
+  tmp: PCityList;
 begin
-  for i := Low(a) to High(a) do
-   begin
-     if currmax<A[i] then
-     Currmax:=A[i];
-   end;
-end;
+  for i := 1 to n do
+    MaxArr[i] := 0;
 
-begin
-  tmpcity:=sitarr[1].city;
-  i:=0;
-  prmax := 0;
-  while i < length(SitArr) do
-  {for i:= 0 to length(SitArr) - 1 do}
+  tmp:= head^.adr;
+
+  while tmp <> nil do
   begin
-    nulledArr(N,A);
-
-    while sitarr[i].city = tmpcity do
+    for j := 1 to N do
     begin
-    Inc(A[SitArr[i].TOfPloho]);
-    inc(i);
+      if tmp^.Info.Sit[j] > MaxArr[j] then
+        MaxArr[j] := tmp^.Info.Sit[j];
     end;
-   currmax:=A[1];
-   getM(currmax, N, A);
-   tmpcity:=sitarr[i].city;
-   prmax:=max(prmax,currmax);
+
+    tmp:= tmp^.adr;
   end;
-  Result := prmax;
+
+
+
 end;
 
 
@@ -109,20 +89,12 @@ begin
 
   for i := 0 to length(SitArr) do
   begin
-    if SitArr[i].City = 'Минский район' then
+    {if SitArr[i].City = 'Минский район' then
     begin
       flag := true;
 
       inc(SitNumArr[Sitarr[i].TOfPloho]);
-      {Rec := MassOfStandart[SitArr[i].TOfPloho];
-      HexCol := rgb(Rec.green, Rec.red, Rec.blue);
-      Colorik.add(IntToStr( HexCol));
 
-
-      //Memo1.Lines.Add(Colorik[currN]);
-      inc(currN);
-      Image1.Canvas.Brush.Color := HexCol;
-      Image1.Canvas.Rectangle(0+CurrN*10,200,CurrN*10 + 10,400); }
     end
     else if flag then
     begin
@@ -142,7 +114,7 @@ begin
         end;
       end;
       break;
-    end;
+    end;   }
   end;
 end;
 
@@ -175,7 +147,9 @@ begin
 
   Colorik := TStringList.Create;
 
-  maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
+  //maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
+
+  GetMaxVal(CityHead, MaxArr, N);
 
   FillMap(SitArr, Colorik, image1, MaxVal, Memo1);
 
@@ -187,7 +161,7 @@ begin
     Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
  end;
 
-  Image1.Canvas.Brush.Color := MixColors(Colorik);
+  //Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
   //Splash.Close;
 end;
