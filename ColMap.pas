@@ -72,7 +72,7 @@ begin
 end;
 
 
-procedure FillMap(var SitArr:TSitArr; Colorik: TStringList; image1: TImage; const Max:integer; Memo: TMemo);
+procedure FillMap(var head: PCityList; Colorik: TStringList; const MaxArr:TSituationArr; Memo: TMemo);
 var
   i,j,currN:integer;
   flag: boolean;
@@ -80,6 +80,7 @@ var
   HexCol : Cardinal;
   SitNumArr: array of integer;
   coef:integer;
+  tmp: PCityList;
 begin
   flag := false;
   currN := 0;
@@ -87,34 +88,23 @@ begin
   for i := Low(SitNumArr) to High(SitNumArr) do
     SitNumArr[i] := 0;
 
-  for i := 0 to length(SitArr) do
+  tmp := head^.adr;
+  while tmp <> nil do
   begin
-    {if SitArr[i].City = 'Минский район' then
-    begin
-      flag := true;
-
-      inc(SitNumArr[Sitarr[i].TOfPloho]);
-
-    end
-    else if flag then
-    begin
-      for j := 1 to High(SitNumArr) do
+      for i:= 1 to N do
       begin
-        Rec := MassOfStandart[j];
-        HexCol := rgb(Rec.green, Rec.red, Rec.blue);
-        coef:= Trunc( 100 - ( SitNumArr[j] / Max ) * 100 );
-        if coef <> 100 then
-        begin
-          HexCol := LighterColor(HexCol, coef);
-          Colorik.add(IntToStr( HexCol));
-          inc(currN);
-          Image1.Canvas.Brush.Color := HexCol;
-          Image1.Canvas.Rectangle(0+CurrN*10,200,CurrN*10 + 10,400);
-          Memo.Lines.Add(IntToStr(j) + ' ' + IntToStr(coef) + ' ' + IntToStr(HexCol));
-        end;
+          Rec := MassOfStandart[i];
+          HexCol := rgb(Rec.green, Rec.red, Rec.blue);
+          coef:= Trunc( 100 - ( tmp^.info.Sit[i] / MaxArr[j] ) * 100 );
+          if coef <> 100 then
+          begin
+              HexCol := LighterColor(HexCol, coef);
+              Colorik.add(IntToStr( HexCol));
+              inc(currN);
+              Memo.Lines.Add(IntToStr(j) + ' ' + IntToStr(coef) + ' ' + IntToStr(HexCol));
+          end;
       end;
-      break;
-    end;   }
+      tmp:= tmp^.adr;
   end;
 end;
 
@@ -151,7 +141,7 @@ begin
 
   GetMaxVal(CityHead, MaxArr, N);
 
-  FillMap(SitArr, Colorik, image1, MaxVal, Memo1);
+  FillMap(CityHead, Colorik, MaxArr, Memo1);
 
 
   for i := 1 to n do
@@ -161,7 +151,7 @@ begin
     Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
  end;
 
-  //Image1.Canvas.Brush.Color := MixColors(Colorik);
+  Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
   //Splash.Close;
 end;
