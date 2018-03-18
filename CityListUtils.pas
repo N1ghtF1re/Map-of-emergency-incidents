@@ -39,5 +39,24 @@ begin
   temp^.Info.Name := Name;
   Result:= temp;
 end;
+ procedure savePriceList(const Head:PCityList; Filename:string);
+   var
+   Temp:PCityList;
+   f: file of PCityList;
+   begin
+   AssignFile(f,Filename);
+   Rewrite(f);
+   Seek(f,Filesize(f));
+   if Head.ADR<>nil then
+     begin
+     temp:=Head.ADR;
+     while Temp<> nil do
+       begin
+         write(f,Temp.Info);
+         Temp:=Temp^.ADR;
+       end;
+     end;
+   Close(f);
+   end;
 
 end.
