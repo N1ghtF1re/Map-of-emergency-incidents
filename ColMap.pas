@@ -150,13 +150,14 @@ end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 var now:TDateTime;
-var f: file of TDateTime;
+  f: file of TDateTime;
 begin
-saveKek(CityHead,'kek.brakh');
-Assignfile(f,'ReadTimeModified.brakh');
-Rewrite(f);
-now:=time;
-write(f,now);
+  saveKek(CityHead,'kek.brakh');
+  Assignfile(f,'ReadTimeModified.brakh');
+  Rewrite(f);
+  now:=time;
+  write(f,now);
+  CloseFile(f);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -192,12 +193,15 @@ begin
     else
       rewrite(f); // pomenyat' na reset
    // if not EOF(f) then
+    Showmessage(TimeToStr(readtime));
+    Showmessage(TimeToStr(filelife));
+    read(f,Readtime);
 
-  read(f,Readtime);
     if ((Readtime-Filelife)>0) then
     begin
     XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
     Xls_Open(XLSFile, CityHead);
+    showmessage('kek');
     end
     else
      readlol(CityHead,'kek.brakh');
@@ -225,6 +229,7 @@ begin
 
     //Image1.Canvas.Brush.Color := MixColors(Colorik);
     //Image1.Canvas.Rectangle(20,600,200,800);
+    CloseFile(f);
   finally
     //Splash.Close;
   end;
