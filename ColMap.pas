@@ -87,6 +87,8 @@ var
   CurrNumOfSit:Integer;
   currY: Integer;
   CurrX: Integer;
+  tmpX: integer;
+  tmpY: Integer;
 begin
   flag := false;
   currN := 0;
@@ -129,7 +131,21 @@ begin
 
       Canvas.Brush.Color := {GrayColor( }tmp^.Info.ResultColor{ )};
       Canvas.Rectangle(0+k*180,curry, k*180 + 180,CurrY + 200);
-      canvas.TextOut(k*180+10,curry+50, tmp^.Info.Name);
+      canvas.TextOut(k*180+10,curry+10, tmp^.Info.Name);
+
+      tmpx:= 1;
+      tmpY:= curry+50;
+      for i := 1 to N do
+      begin
+        canvas.TextOut(k*180+ tmpx*25, tmpY, IntToStr(tmp^.Info.Sit[i]));
+        if tmpx div 5 = 1 then
+        begin
+          tmpx:=0;
+          tmpy:= tmpy+ 35;
+          //ShowMessage('kek');
+        end;
+        inc(tmpx);
+      end;
       inc(k);
       tmp:= tmp^.adr;
   end;
