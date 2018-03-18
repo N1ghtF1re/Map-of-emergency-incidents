@@ -84,6 +84,8 @@ var
   tmp: PCityList;
   k: integer;
   CurrNumOfSit:Integer;
+  currY: Integer;
+  CurrX: Integer;
 begin
   flag := false;
   currN := 0;
@@ -92,7 +94,8 @@ begin
     SitNumArr[i] := 0;
 
   tmp := head^.adr;
-  k:=0;
+  k:=1;
+  curry:= 40;
   while tmp <> nil do
   begin
       currN := 1;
@@ -114,9 +117,18 @@ begin
           end;
       end;
       tmp^.Info.ResultColor := MixColors(Colorik, currN-1);
+      Memo.Visible := false;
+
+      if k div 7 >= 1 then
+      begin
+        Curry:= curry + 200;
+        k := k div 7;
+      end;
+
+
       Canvas.Brush.Color := tmp^.Info.ResultColor;
-      Canvas.Rectangle(i*40, 0, i*40 + 40, 200);
-      canvas.TextOut(i*40,20, tmp^.Info.Name);
+      Canvas.Rectangle(0+k*180,curry, k*180 + 180,CurrY + 200);
+      canvas.TextOut(k*180+10,curry+50, tmp^.Info.Name);
       inc(k);
       tmp:= tmp^.adr;
   end;
@@ -162,7 +174,7 @@ begin
   begin
     // Отрисовка основных цветов
     Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
-    Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
+    Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,20);
  end;
 
   //Image1.Canvas.Brush.Color := MixColors(Colorik);
