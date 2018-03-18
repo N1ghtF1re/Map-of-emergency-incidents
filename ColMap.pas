@@ -72,7 +72,7 @@ begin
 end;
 
 
-procedure FillMap(var head: PCityList; Colorik: TColorArr; const MaxArr:TSituationArr; Memo: TMemo; Canvas:TCanvas);
+procedure FillMap(var head: PCityList; Colorik: TColorArr; {const MaxVal: integer}MaxArr:TSituationArr; Memo: TMemo; Canvas:TCanvas);
 
 var
   i,j,currN:integer;
@@ -105,9 +105,9 @@ begin
           HexCol := rgb(Rec.green, Rec.red, Rec.blue);
           CurrNumOfSit := tmp^.info.Sit[i];
           if maxarr[i] <> 0 then
-            coef:= Trunc( 100 - ( CurrNumOfSit / MaxArr[i] ) * 100 )
+            coef:= Trunc( 100 - ( CurrNumOfSit / MaxArr[i] {MaxVal} ) * 100 )
           else
-            coef:= 10;
+            coef:= 100;
           if coef <> 100 then
           begin
               HexCol := LighterColor(HexCol, coef);
@@ -134,6 +134,19 @@ begin
   end;
 end;
 
+function maxWithArr(arr:TSituationArr):integer;
+var i: integer;
+  max: integer;
+begin
+  max:= arr[1];
+  for I := Low(arr) to High(arr) do
+  begin
+    if arr[i] > max then
+      max := arr[i];
+  end;
+  result := max;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 
 var
@@ -141,6 +154,7 @@ var
   XLSFile: string;
   png: TPngImage;
   Colorik:TColorArr;
+  maxVal: integer;
 begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
@@ -166,8 +180,8 @@ begin
   //maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
 
   GetMaxVal(CityHead, MaxArr, N);
-
-  FillMap(CityHead, Colorik, MaxArr, Memo1, Image1.Canvas);
+  //MaxVal := maxWithArr(MaxArr);
+  FillMap(CityHead, Colorik, {MaxVal}MaxArr, Memo1, Image1.Canvas);
 
 
   for i := 1 to n do
