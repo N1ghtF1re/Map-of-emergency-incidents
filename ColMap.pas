@@ -160,7 +160,6 @@ begin
 end;
 
 begin
-  prmax:=0;
   tmpcity:=sitarr[1].city;
   i:=0;
   prmax := 0;
@@ -177,12 +176,7 @@ begin
    currmax:=A[1];
    getM(currmax, N, A);
    tmpcity:=sitarr[i].city;
-<<<<<<< HEAD
    prmax:=max(prmax,currmax);
-=======
-   result:=max(prmax,currmax);
-   prmax:=currmax;
->>>>>>> 4615c8e4a93a3438fb2f77b7537d15d7a961d453
   end;
   Result := prmax;
 end;
@@ -234,11 +228,7 @@ begin
   Colorik := TStringList.Create;
 
   maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
-<<<<<<< HEAD
   // ShowMessage( IntToStr(MaxVal) );
-=======
-  ShowMessage(inttostr(maxval));
->>>>>>> 4615c8e4a93a3438fb2f77b7537d15d7a961d453
   flag := false;
   for i := 0 to length(SitArr) - 1 do
   begin
