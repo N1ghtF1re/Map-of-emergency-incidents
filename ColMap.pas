@@ -18,6 +18,7 @@ type
     dlgOpen: TOpenDialog;
     introIMG: TImage;
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   private
     { Private declarations }
@@ -155,6 +156,8 @@ var
   png: TPngImage;
   Colorik:TColorArr;
   maxVal: integer;
+  f:file of TDateTime;
+  Readtime,filelife:TDateTime;
 begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
@@ -167,9 +170,20 @@ begin
 
     N:=19;  // CHANGE PLS!!!!!!!!!!!
 
-    XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
+   // XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
+    //Xls_Open(XLSFile, CityHead);
+  Fileage(GetCurrentDir + '\kek.xlsx',filelife);
+  assignFile(f,'ReadTimeModified.brakh');
+  rewrite(f); // pomenyat' na reset
+    if not EOF(f) then read(Readtime);
+    if ((Readtime-Filelife)>0) then
+    begin
+    XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
     Xls_Open(XLSFile, CityHead);
+    end
+    else
+     readlol(CityHead,'kek.brakh');
 
     SetLength(MassOfStandart,N-1);
     shift := kek div n;
@@ -198,6 +212,16 @@ begin
     Splash.Close;
   end;
 
+end;
+
+procedure TForm1.FormDestroy(Sender: TObject);
+var now:TDateTime;
+var f: file of TDateTime;
+begin
+Assignfile(f,'ReadTimeModified.brakh');
+Reset(f);
+now:=time;
+write(f,now);
 end;
 
 end.
