@@ -141,6 +141,7 @@ var
   A:array [1..19]  of Integer;
   i,prmax,currmax,j:Integer;
 begin
+  prmax:=0;
   tmpcity:=sitarr[1].city;
   i:=0;
   while i < length(SitArr) do
@@ -164,6 +165,7 @@ begin
    end;
    tmpcity:=sitarr[i].city;
    result:=max(prmax,currmax);
+   prmax:=currmax;
   end;
 end;
 
@@ -214,7 +216,7 @@ begin
   Colorik := TStringList.Create;
 
   maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
-
+  ShowMessage(inttostr(maxval));
   flag := false;
   for i := 0 to length(SitArr) - 1 do
   begin
