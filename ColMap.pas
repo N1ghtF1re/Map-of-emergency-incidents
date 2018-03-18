@@ -135,21 +135,38 @@ begin
     else
     result:=b;
 end;
+
+procedure nulledArr(size: integer;var Arr: array of Integer);
+var i:integer;
+begin
+  for i := Low(arr) to High(arr) do
+    Arr[i] := 0;
+end;
+
 function GetMaxVal(sitarr:TSitArr; const N: integer):Integer;
 var
   tmpcity:string;
   A:array [1..19]  of Integer;
   i,prmax,currmax,j:Integer;
+
+procedure getM(var currmax: integer;const N:integer;var A: array of integer);
+var i:integer;
+begin
+  for i := Low(a) to High(a) do
+   begin
+     if currmax<A[i] then
+     Currmax:=A[i];
+   end;
+end;
+
 begin
   tmpcity:=sitarr[1].city;
   i:=0;
+  prmax := 0;
   while i < length(SitArr) do
   {for i:= 0 to length(SitArr) - 1 do}
   begin
-    for j := 1 to N do
-    begin
-      A[j]:=0;
-    end;
+    nulledArr(N,A);
 
     while sitarr[i].city = tmpcity do
     begin
@@ -157,14 +174,11 @@ begin
     inc(i);
     end;
    currmax:=A[1];
-   for j:=1 to N do
-   begin
-     if currmax<A[j] then
-     Currmax:=A[j];
-   end;
+   getM(currmax, N, A);
    tmpcity:=sitarr[i].city;
-   result:=max(prmax,currmax);
+   prmax:=max(prmax,currmax);
   end;
+  Result := prmax;
 end;
 
 
@@ -214,7 +228,7 @@ begin
   Colorik := TStringList.Create;
 
   maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
-
+  // ShowMessage( IntToStr(MaxVal) );
   flag := false;
   for i := 0 to length(SitArr) - 1 do
   begin
