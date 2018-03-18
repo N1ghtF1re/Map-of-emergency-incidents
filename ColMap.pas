@@ -155,7 +155,7 @@ begin
   saveKek(CityHead,'kek.brakh');
   Assignfile(f,'ReadTimeModified.brakh');
   Rewrite(f);
-  now:=time;
+  Fileage(GetCurrentDir + '\kek.xlsx',now);
   write(f,now);
   CloseFile(f);
 end;
@@ -197,7 +197,8 @@ begin
 
     Showmessage(TimeToStr(readtime));
     Showmessage(TimeToStr(filelife));
-    if ((Readtime-Filelife)>0) then
+
+    if (Readtime<>Filelife) then
     begin
     XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
     Xls_Open(XLSFile, CityHead);
