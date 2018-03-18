@@ -18,6 +18,7 @@ type
     dlgOpen: TOpenDialog;
     introIMG: TImage;
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   private
     { Private declarations }
@@ -152,20 +153,26 @@ var
   Colorik: TStringList;
   XLSFile: string;
   png: TPngImage;
+  SaveTime: file of TDateTime;
+  Readtime:TDateTime;
+   fileade : TDateTime;
 begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
   Splash := TSplash.Create(png);
+   CreateCityList(CityHead);
   //Splash.Show(true);
-
-  CreateCityList(CityHead);
-
-  N:=19;  // CHANGE PLS!!!!!!!!!!!
-
+  N:=19;   // CHANGE PLS!!!!!!!!!!!
+ Fileage(GetCurrentDir + '\kek.xlsx',fileage);
+  assignFile(SaveTime,'ReadTimeModified.brakh');
+  rewrite(Savetime); // pomenyat' na reset
+  if not EOF(Savetime) then read(Readtime);
+  if ((Readtime-Fileage)>0) then
+  begin
   XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
   Xls_Open(XLSFile, CityHead);
-
+  end;
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
 
@@ -190,6 +197,15 @@ begin
   Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
   //Splash.Close;
+end;
+
+procedure TForm1.FormDestroy(Sender: TObject);
+var   SaveTime: file of TDateTime;
+
+begin
+Assign(SaveTime,'ReadTimeModified.brakh');
+Reset(SaveTime);
+write(SaveTime,Time);
 end;
 
 end.
