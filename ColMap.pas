@@ -193,10 +193,10 @@ begin
     else
       rewrite(f); // pomenyat' na reset
    // if not EOF(f) then
-    Showmessage(TimeToStr(readtime));
-    Showmessage(TimeToStr(filelife));
     read(f,Readtime);
 
+    Showmessage(TimeToStr(readtime));
+    Showmessage(TimeToStr(filelife));
     if ((Readtime-Filelife)>0) then
     begin
     XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
