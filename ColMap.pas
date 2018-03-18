@@ -182,6 +182,60 @@ begin
 end;
 
 
+procedure FillMap(var SitArr:TSitArr; Colorik: TStringList; image1: TImage; const Max:integer; Memo: TMemo);
+var
+  i,j,currN:integer;
+  flag: boolean;
+  Rec: TRecordCust;
+  HexCol : Cardinal;
+  SitNumArr: array of integer;
+  coef:integer;
+begin
+  flag := false;
+  currN := 0;
+  setlength(SitNumArr, N+1);
+  for i := Low(SitNumArr) to High(SitNumArr) do
+    SitNumArr[i] := 0;
+
+  for i := 0 to length(SitArr) do
+  begin
+    if SitArr[i].City = 'Минский район' then
+    begin
+      flag := true;
+
+      inc(SitNumArr[Sitarr[i].TOfPloho]);
+      {Rec := MassOfStandart[SitArr[i].TOfPloho];
+      HexCol := rgb(Rec.green, Rec.red, Rec.blue);
+      Colorik.add(IntToStr( HexCol));
+
+
+      //Memo1.Lines.Add(Colorik[currN]);
+      inc(currN);
+      Image1.Canvas.Brush.Color := HexCol;
+      Image1.Canvas.Rectangle(0+CurrN*10,200,CurrN*10 + 10,400); }
+    end
+    else if flag then
+    begin
+      for j := 1 to High(SitNumArr) do
+      begin
+        Rec := MassOfStandart[j];
+        HexCol := rgb(Rec.green, Rec.red, Rec.blue);
+        coef:= Trunc( 100 - ( SitNumArr[j] / Max ) * 100 );
+        if coef <> 100 then
+        begin
+          HexCol := LighterColor(HexCol, coef);
+          Colorik.add(IntToStr( HexCol));
+          inc(currN);
+          Image1.Canvas.Brush.Color := HexCol;
+          Image1.Canvas.Rectangle(0+CurrN*10,200,CurrN*10 + 10,400);
+          Memo.Lines.Add(IntToStr(j) + ' ' + IntToStr(coef) + ' ' + IntToStr(HexCol));
+        end;
+      end;
+      break;
+    end;
+  end;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   i:integer;
@@ -191,10 +245,6 @@ var
   Col: TColor;
   Colorik: TStringList;
   XLSFile: string;
-  currN:integer;
-  Rec: TRecordCust;
-  HexCol : Cardinal;
-  flag: boolean;
   png: TPngImage;
 begin
   // SPLASH SCREEN4iK
@@ -202,80 +252,33 @@ begin
   Splash := TSplash.Create(png);
   //Splash.Show(true);
 
-  r:=0;
-  g:=0;
-  b:=0;
-
   N:=19;  // CHANGE PLS!!!!!!!!!!!
 
-  {if dlgOpen.Execute then     XLSFile := dlgOpen.FileName;}
-  XLSFile := GetCurrentDir + '\kek.xlsx';
+  XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
   Xls_Open(XLSFile, Memo1);
 
-  //Memo1.Lines.Add( SitArr[i].City + ' ' + SitArr[i].TOfPloho );
-
-
-  //SetLength(Colorik,N-1);
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
 
   creatingBasicColors(MassOfStandart, N, shift);
 
-  currN := 0;
   QuickSort( length(SitArr)-1, SitArr);
 
   Colorik := TStringList.Create;
 
   maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
   // ShowMessage( IntToStr(MaxVal) );
-  flag := false;
-  for i := 0 to length(SitArr) - 1 do
-  begin
-    if SitArr[i].City = 'Воложинский район' then
-    begin
-      flag := true;
-      //ShowMessage(IntToStr(SitArr[i].TOfPloho-1));
-      Rec := MassOfStandart[SitArr[i].TOfPloho-1];
-      HexCol := rgb(Rec.green, Rec.red, Rec.blue);
-      Colorik.add(IntToStr( HexCol));
-      Memo1.Lines.Add(Colorik[currN]);
-      inc(currN);
-    end
-    else if flag then
-      break;
-  end;
+
+  FillMap(SitArr, Colorik, image1, MaxVal, Memo1);
+
+
   for i := 1 to n do
   begin
-    //RGBtoHSL(RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue ), H,S,L);
-    //Image1.Canvas.TextOut(i*20, i*20 + 300, FloatToStr(H) + ' ' +  FloatToStr(S) + ' '+ FloatToStr(l));
-
+    // Отрисовка основных цветов
     Image1.Canvas.Brush.Color := RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
     Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
-    r:= MassOfStandart[i].red;
-    g:= MassOfStandart[i].green;
-    b:= MassOfStandart[i].blue;
-
-    L := 0.75;
-    Col:= RGB( MassOfStandart[i].red, MassOfStandart[i].green, MassOfStandart[i].blue );
-    Image1.Canvas.Brush.Color := LighterColor( Col, 67);
-    Image1.Canvas.Rectangle(0+i*20,200,i*20 + 20,400);
-    //Colorik[i-1] := LighterColor( Col, 67);
-
-
-    Image1.Canvas.Brush.Color := GrayColor(Col);
-    Image1.Canvas.Rectangle(0+i*20,400,i*20 + 20,600);
-
-    {L := 0.95;
-    Image1.Canvas.Brush.Color :=
-    Image1.Canvas.Rectangle(0+i*20,400,i*20 + 20,600); }
-
-
-    //ShowMessage( IntToStr(r) + ' ' + IntToStr(G)+ ' ' + IntToStr(B) );
-    image1.Canvas.Brush.Color := clwhite;
-    //Image1.Canvas.TextOut(i*20, i*20 + 300, IntToStr(MassOfStandart[i].red) + ' ' +  IntToStr(MassOfStandart[i].green) + ' '+ IntToStr(MassOfStandart[i].blue));
-
-  end;
+ end;
 
 
   sum := sum div N;
