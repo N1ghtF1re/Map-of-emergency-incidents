@@ -17,6 +17,8 @@ procedure createCityList(var head: PCityList);
 function insertCityList(head: PCityList; Name: string):PCityList;
 
 implementation
+const
+  NullArr: TSituationArr = (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 procedure createCityList(var head: PCityList);
 begin
@@ -37,6 +39,7 @@ begin
   temp:= temp^.adr;
   temp^.adr := nil;
   temp^.Info.Name := Name;
+  temp^.Info.Sit := NullArr;
   Result:= temp;
 end;
  procedure savePriceList(const Head:PCityList; Filename:string);
