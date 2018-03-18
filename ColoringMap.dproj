@@ -105,6 +105,8 @@
         </DCCReference>
         <DCCReference Include="HSLUtils.pas"/>
         <DCCReference Include="CreateBasicColors.pas"/>
+        <DCCReference Include="ExcelUtils.pas"/>
+        <DCCReference Include="CityListUtils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

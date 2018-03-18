@@ -4,7 +4,9 @@ uses
   Vcl.Forms,
   ColMap in 'ColMap.pas' {Form1},
   HSLUtils in 'HSLUtils.pas',
-  CreateBasicColors in 'CreateBasicColors.pas';
+  CreateBasicColors in 'CreateBasicColors.pas',
+  ExcelUtils in 'ExcelUtils.pas',
+  CityListUtils in 'CityListUtils.pas';
 
 {$R *.res}
 

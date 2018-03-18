@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms,pngimage, Vcl.Dialogs, Vcl.ExtCtrls,ExcelUtils, HSLUtils,SplashScreen, Vcl.StdCtrls, ComObj, CreateBasicColors;
+  Vcl.Controls, Vcl.Forms,pngimage, Vcl.Dialogs, Vcl.ExtCtrls,ExcelUtils,
+  HSLUtils,SplashScreen, Vcl.StdCtrls, ComObj, CreateBasicColors, CityListUtils;
 Const
 //  n = 17;
   kek = trunc(255*5.78);
@@ -31,54 +32,11 @@ var
   SitArr: TSitArr;
   splash: TSplash;
   maxVal: integer;
+  CityHead: PCityList;
 
 implementation
 
 {$R *.dfm}
-
-procedure QuickSort(const size: integer; QA: TSitArr);
-
-procedure Swap(var arr: TSitArr; var el1, el2: Integer);
-var tmp:TSituationRec;
-begin
-  tmp:=arr[el1];
-  arr[el1]:=arr[el2];
-  arr[el2]:=tmp;
-end;
-Procedure QSort(L,R: Integer);
-var
-  I,J,Y:Integer;
-  X:String;
-begin
-  I:=L;
-  J:=R;
-  X:=QA[(L+R) div 2].City;
-  repeat
-    while QA[I].City<X do
-    begin
-      Inc (I);
-    end;
-    while QA[J].City>X do
-    begin
-      Dec (J);
-    end;
-    if I<=J then
-    begin
-      SWAP(QA,i,j);
-      Inc (I);
-      Dec (J);
-    end;
-  until I>J;
-  if J>L then
-    QSort(L,J);
-  if I<R then
-    QSort(I,R);
-end;
-begin
-  QSort (0,size);
-end;
-
-
 
 function max(a,b:Integer):Integer;
 begin
@@ -200,11 +158,13 @@ begin
   Splash := TSplash.Create(png);
   //Splash.Show(true);
 
+  CreateCityList(CityHead);
+
   N:=19;  // CHANGE PLS!!!!!!!!!!!
 
   XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
-  Xls_Open(XLSFile, SitArr);
+  Xls_Open(XLSFile, CityHead);
 
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
@@ -216,7 +176,6 @@ begin
   Colorik := TStringList.Create;
 
   maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
-  // ShowMessage( IntToStr(MaxVal) );
 
   FillMap(SitArr, Colorik, image1, MaxVal, Memo1);
 
