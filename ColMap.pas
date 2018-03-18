@@ -11,7 +11,7 @@ Const
   kek = trunc(255*5.78);
 //  shift = kek div n;
 type
-
+  TColorArr = array[1..19] of TColor;
   TForm1 = class(TForm)
     Image1: TImage;
     Memo1: TMemo;
@@ -72,15 +72,18 @@ begin
 end;
 
 
-procedure FillMap(var head: PCityList; Colorik: TStringList; const MaxArr:TSituationArr; Memo: TMemo);
+procedure FillMap(var head: PCityList; Colorik: TColorArr; const MaxArr:TSituationArr; Memo: TMemo; Canvas:TCanvas);
+
 var
   i,j,currN:integer;
   flag: boolean;
   Rec: TRecordCust;
-  HexCol : Cardinal;
+  HexCol : TColor;
   SitNumArr: array of integer;
   coef:integer;
   tmp: PCityList;
+  k: integer;
+  CurrNumOfSit:Integer;
 begin
   flag := false;
   currN := 0;
@@ -89,31 +92,43 @@ begin
     SitNumArr[i] := 0;
 
   tmp := head^.adr;
+  k:=0;
   while tmp <> nil do
   begin
+      currN := 1;
       for i:= 1 to N do
       begin
           Rec := MassOfStandart[i];
           HexCol := rgb(Rec.green, Rec.red, Rec.blue);
-          coef:= Trunc( 100 - ( tmp^.info.Sit[i] / MaxArr[j] ) * 100 );
+          CurrNumOfSit := tmp^.info.Sit[i];
+          if maxarr[i] <> 0 then
+            coef:= Trunc( 100 - ( CurrNumOfSit / MaxArr[i] ) * 100 )
+          else
+            coef:= 10;
           if coef <> 100 then
           begin
               HexCol := LighterColor(HexCol, coef);
-              Colorik.add(IntToStr( HexCol));
+              Colorik[CurrN] := hexCol;
               inc(currN);
-              Memo.Lines.Add(IntToStr(j) + ' ' + IntToStr(coef) + ' ' + IntToStr(HexCol));
+              //Memo.Lines.Add(IntToStr(i) + ' ' + IntToStr(coef) + ' ' + IntToStr(HexCol));
           end;
       end;
+      tmp^.Info.ResultColor := MixColors(Colorik, currN-1);
+      Canvas.Brush.Color := tmp^.Info.ResultColor;
+      Canvas.Rectangle(i*40, 0, i*40 + 40, 200);
+      canvas.TextOut(i*40,20, tmp^.Info.Name);
+      inc(k);
       tmp:= tmp^.adr;
   end;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+
 var
   i:integer;
-  Colorik: TStringList;
   XLSFile: string;
   png: TPngImage;
+  Colorik:TColorArr;
 begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
@@ -135,13 +150,12 @@ begin
 
   // QuickSort( length(SitArr)-1, SitArr);
 
-  Colorik := TStringList.Create;
 
   //maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
 
   GetMaxVal(CityHead, MaxArr, N);
 
-  FillMap(CityHead, Colorik, MaxArr, Memo1);
+  FillMap(CityHead, Colorik, MaxArr, Memo1, Image1.Canvas);
 
 
   for i := 1 to n do
@@ -151,8 +165,8 @@ begin
     Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
  end;
 
-  Image1.Canvas.Brush.Color := MixColors(Colorik);
-  Image1.Canvas.Rectangle(20,600,200,800);
+  //Image1.Canvas.Brush.Color := MixColors(Colorik);
+  //Image1.Canvas.Rectangle(20,600,200,800);
   //Splash.Close;
 end;
 

@@ -2,11 +2,15 @@ unit CityListUtils;
 
 interface
 
+uses
+  vcl.graphics;
+
 type
   TSituationArr = array[1..19] of word;
   TCityInfo = record
     Name: string[40];
     Sit: TSituationArr;
+    ResultColor: TColor;
   end;
   PCityList = ^CityList;
   CityList = record
@@ -42,7 +46,7 @@ begin
   temp^.Info.Sit := NullArr;
   Result:= temp;
 end;
- procedure savePriceList(const Head:PCityList; Filename:string);
+ {procedure savePriceList(const Head:PCityList; Filename:string);
    var
    Temp:PCityList;
    f: file of PCityList;
@@ -60,6 +64,6 @@ end;
        end;
      end;
    Close(f);
-   end;
+   end; }
 
 end.
