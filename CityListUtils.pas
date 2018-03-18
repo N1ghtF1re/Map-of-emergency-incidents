@@ -17,6 +17,7 @@ type
     Info: TCityInfo;
     adr: PCityList;
   end;
+procedure savePriceList(const Head:PCityList; Filename:string);
 procedure createCityList(var head: PCityList);
 function insertCityList(head: PCityList; Name: string):PCityList;
 
@@ -46,10 +47,10 @@ begin
   temp^.Info.Sit := NullArr;
   Result:= temp;
 end;
- {procedure savePriceList(const Head:PCityList; Filename:string);
+ procedure savePriceList(const Head:PCityList; Filename:string);
    var
    Temp:PCityList;
-   f: file of PCityList;
+   f: file of TCityInfo;
    begin
    AssignFile(f,Filename);
    Rewrite(f);
@@ -64,6 +65,6 @@ end;
        end;
      end;
    Close(f);
-   end; }
+   end;
 
 end.
