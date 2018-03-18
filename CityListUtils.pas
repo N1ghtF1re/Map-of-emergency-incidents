@@ -17,7 +17,8 @@ type
     Info: TCityInfo;
     adr: PCityList;
   end;
-procedure savePriceList(const Head:PCityList; Filename:string);
+procedure readLol(const Head:PCityList; Filename:string);
+procedure saveKek(const Head:PCityList; Filename:string);
 procedure createCityList(var head: PCityList);
 function insertCityList(head: PCityList; Name: string):PCityList;
 
@@ -47,7 +48,7 @@ begin
   temp^.Info.Sit := NullArr;
   Result:= temp;
 end;
- procedure savePriceList(const Head:PCityList; Filename:string);
+ procedure saveKek(const Head:PCityList; Filename:string);
    var
    Temp:PCityList;
    f: file of TCityInfo;
@@ -66,7 +67,7 @@ end;
      end;
    Close(f);
    end;
-      procedure readPricelist(const Head:PCityList; Filename:string);
+      procedure readLol(const Head:PCityList; Filename:string);
    var
    Temp:PCityList;
    Info:TCityInfo;
@@ -93,7 +94,7 @@ end;
      begin
        Rewrite(f);
        ShowMessage('No such file or directiory');
-       readPricelist(Head,'kek.brakh');
+       readLol(Head,'kek.brakh');
      end;
      close(f)
    end;
