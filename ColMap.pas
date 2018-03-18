@@ -159,7 +159,8 @@ begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
   Splash := TSplash.Create(png);
-  //Splash.Show(true);
+  Splash.Show(true);
+
 
   CreateCityList(CityHead);
 
@@ -193,7 +194,7 @@ begin
 
   //Image1.Canvas.Brush.Color := MixColors(Colorik);
   //Image1.Canvas.Rectangle(20,600,200,800);
-  //Splash.Close;
+  Splash.Close;
 end;
 
 end.
