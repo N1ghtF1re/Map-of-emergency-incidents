@@ -162,7 +162,7 @@ begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
   Splash := TSplash.Create(png);
-  Splash.Show(true);
+  //Splash.Show(true);
 
 
   try
@@ -173,9 +173,12 @@ begin
    // XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
     //Xls_Open(XLSFile, CityHead);
-  Fileage(GetCurrentDir + '\kek.xlsx',filelife);
-  assignFile(f,'ReadTimeModified.brakh');
-  rewrite(f); // pomenyat' na reset
+    Fileage(GetCurrentDir + '\kek.xlsx',filelife);
+    assignFile(f,'ReadTimeModified.brakh');
+    if fileExists('ReadTimeModified.brakh') then
+      reset(f)
+    else
+      rewrite(f); // pomenyat' na reset
     if not EOF(f) then read(Readtime);
     if ((Readtime-Filelife)>0) then
     begin
@@ -209,7 +212,7 @@ begin
     //Image1.Canvas.Brush.Color := MixColors(Colorik);
     //Image1.Canvas.Rectangle(20,600,200,800);
   finally
-    Splash.Close;
+    //Splash.Close;
   end;
 
 end;
