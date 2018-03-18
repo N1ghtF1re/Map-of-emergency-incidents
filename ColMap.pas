@@ -126,7 +126,7 @@ begin
       end;
 
 
-      Canvas.Brush.Color := tmp^.Info.ResultColor;
+      Canvas.Brush.Color := {GrayColor( }tmp^.Info.ResultColor{ )};
       Canvas.Rectangle(0+k*180,curry, k*180 + 180,CurrY + 200);
       canvas.TextOut(k*180+10,curry+50, tmp^.Info.Name);
       inc(k);
