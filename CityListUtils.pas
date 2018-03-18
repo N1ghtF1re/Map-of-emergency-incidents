@@ -3,7 +3,7 @@ unit CityListUtils;
 interface
 
 uses
-  vcl.graphics;
+  vcl.graphics,Vcl.Dialogs,System.SysUtils;
 
 type
   TSituationArr = array[1..19] of word;
@@ -66,5 +66,35 @@ end;
      end;
    Close(f);
    end;
+      procedure readPricelist(const Head:PCityList; Filename:string);
+   var
+   Temp:PCityList;
+   Info:TCityInfo;
+   TInfo:TCityInfo;
+   f: file of TCityInfo;
+   begin
 
+   if fileExists(Filename) then
+     begin
+       AssignFile(f,Filename);
+     Reset(f);
+     Head^.ADR:=nil;
+     temp:=Head;
+     while not(Eof(f)) do
+     begin
+       read(f,TInfo);
+       new(Temp^.adr);
+       Temp:=Temp^.ADR;
+       Temp.ADR:=nil;
+       temp.Info:=TInfo;
+     end;
+     end
+     else
+     begin
+       Rewrite(f);
+       ShowMessage('No such file or directiory');
+       readPricelist(Head,'kek.brakh');
+     end;
+     close(f)
+   end;
 end.
