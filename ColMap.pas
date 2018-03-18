@@ -152,19 +152,29 @@ var
   Colorik: TStringList;
   XLSFile: string;
   png: TPngImage;
+  SaveTime: file of TDateTime;
+  Readtime:TDateTime;
+   fileade : TDateTime;
 begin
   // SPLASH SCREEN4iK
   png:= TPngImage(introIMG.Picture);
   Splash := TSplash.Create(png);
   //Splash.Show(true);
-
-  CreateCityList(CityHead);
+ Fileage(GetCurrentDir + '\kek.xlsx',fileage);
+ CreateCityList(CityHead);
 
   N:=19;  // CHANGE PLS!!!!!!!!!!!
+  assignFile(SaveTime,'ReadTimeModified.brakh');
+  rewrite(Savetime); // pomenyat' na reset
+  if not EOF(Savetime) then read(Readtime);
+  if ((Readtime-Fileage)>0) then
+  begin
+
 
   XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
   Xls_Open(XLSFile, CityHead);
+  end;
 
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
