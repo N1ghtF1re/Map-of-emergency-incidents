@@ -85,12 +85,12 @@ begin
 end;
 
 
-procedure Xls_Open(XLSFile:string; Memo: TMemo);
+procedure Xls_Open(XLSFile:string; var SitArr: TSitArr);
  const
   xlCellTypeLastCell = $0000000B;
 var
   ExlApp, Sheet: OLEVariant;
-  j, r, c:integer;
+  j, r:integer;
   CI, SI: integer;
   tmp: string;
 begin
@@ -147,7 +147,7 @@ function GetMaxVal(sitarr:TSitArr; const N: integer):Integer;
 var
   tmpcity:string;
   A:array [1..19]  of Integer;
-  i,prmax,currmax,j:Integer;
+  i,prmax,currmax:Integer;
 
 procedure getM(var currmax: integer;const N:integer;var A: array of integer);
 var i:integer;
@@ -239,10 +239,6 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var
   i:integer;
-  H,S,L: double;
-  r,g,b: integer;
-  sum: LongInt;
-  Col: TColor;
   Colorik: TStringList;
   XLSFile: string;
   png: TPngImage;
@@ -256,7 +252,7 @@ begin
 
   XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
 
-  Xls_Open(XLSFile, Memo1);
+  Xls_Open(XLSFile, SitArr);
 
   SetLength(MassOfStandart,N-1);
   shift := kek div n;
@@ -280,8 +276,6 @@ begin
     Image1.Canvas.Rectangle(0+i*20,0,i*20 + 20,200);
  end;
 
-
-  sum := sum div N;
   Image1.Canvas.Brush.Color := MixColors(Colorik);
   Image1.Canvas.Rectangle(20,600,200,800);
   //Splash.Close;
