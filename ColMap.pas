@@ -105,7 +105,7 @@ begin
   Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
   r := ExlApp.ActiveCell.Row;
-  SetLength(SitArr, r);
+  SetLength(SitArr, r-2);
   for j:= 2 to r do
   begin
     SI:= 57+26;
@@ -135,16 +135,18 @@ begin
     else
     result:=b;
 end;
-function GetMaxVal(sitarr:TSitArr):Integer;
+function GetMaxVal(sitarr:TSitArr; const N: integer):Integer;
 var
   tmpcity:string;
   A:array [1..19]  of Integer;
   i,prmax,currmax,j:Integer;
 begin
   tmpcity:=sitarr[1].city;
-  for i:= 0 to length(SitArr) - 1 do
+  i:=0;
+  while i < length(SitArr) do
+  {for i:= 0 to length(SitArr) - 1 do}
   begin
-  for j := 1 to 19 do
+    for j := 1 to N do
     begin
       A[j]:=0;
     end;
@@ -152,9 +154,10 @@ begin
     while sitarr[i].city = tmpcity do
     begin
     Inc(A[SitArr[i].TOfPloho]);
+    inc(i);
     end;
    currmax:=A[1];
-   for j:=1 to 19 do
+   for j:=1 to N do
    begin
      if currmax<A[j] then
      Currmax:=A[j];
@@ -210,7 +213,7 @@ begin
 
   Colorik := TStringList.Create;
 
-  maxVal := GetMaxVal(SitArr); // Максимальное значение происшествий в городе
+  maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
 
   flag := false;
   for i := 0 to length(SitArr) - 1 do
