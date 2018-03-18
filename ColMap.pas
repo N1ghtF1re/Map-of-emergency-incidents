@@ -4,18 +4,12 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms,pngimage, Vcl.Dialogs, Vcl.ExtCtrls, HSLUtils,SplashScreen, Vcl.StdCtrls, ComObj, CreateBasicColors;
+  Vcl.Controls, Vcl.Forms,pngimage, Vcl.Dialogs, Vcl.ExtCtrls,ExcelUtils, HSLUtils,SplashScreen, Vcl.StdCtrls, ComObj, CreateBasicColors;
 Const
 //  n = 17;
   kek = trunc(255*5.78);
 //  shift = kek div n;
 type
-
-  TSituationRec = Record
-    City: string[40];
-    TOfPloho: integer;
-  end;
-  TSitArr = array of TSituationRec;
 
   TForm1 = class(TForm)
     Image1: TImage;
@@ -85,55 +79,6 @@ begin
 end;
 
 
-procedure Xls_Open(XLSFile:string; var SitArr: TSitArr);
- const
-  xlCellTypeLastCell = $0000000B;
-var
-  ExlApp, Sheet: OLEVariant;
-  j, c, r:integer;
-  CI, SI: integer;
-  tmp: string;
-begin
-  ExlApp := CreateOleObject('Excel.Application');
-
-  ExlApp.Visible := false;
-
-  ExlApp.Workbooks.Open(XLSFile);
-
-  Sheet := ExlApp.Workbooks[ExtractFileName(XLSFile)].WorkSheets[1];
-
-  Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
-
-
-
-  r := ExlApp.ActiveCell.Row;
-  c := ExlApp.ActiveCell.Column;
-  SetLength(SitArr, r-2);
-  sheet.Range[Sheet.Cells[2,1],Sheet.Cells[r,c]].Sort
-  (Key1:=sheet.Range[Sheet.Cells[2,1],Sheet.Cells[r,1]], Order1:=1, Header:=0, OrderCustom:=1, MatchCase:=False, Orientation:=1, DataOption1:=0);
-
-  for j:= 2 to r do
-  begin
-    SI:= 57+26;
-    CI:=1;
-
-    SitArr[j-2].City := sheet.cells[j, CI];
-    tmp := sheet.cells[j, SI];
-
-    if tmp[2] in ['0'..'9'] then
-      SitArr[j-2].TOfPloho := StrToInt( tmp[1] + tmp[2] )
-    else
-      SitArr[j-2].TOfPloho := StrToInt(tmp[1]);
-  end;
-  tmp := #0;
-
-Excel.DisplayAlerts := False; // <-
- ExlApp.Quit;
-
- ExlApp := Unassigned;
- Sheet := Unassigned;
-
-end;
 
 function max(a,b:Integer):Integer;
 begin
