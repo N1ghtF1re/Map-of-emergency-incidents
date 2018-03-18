@@ -13,12 +13,12 @@ type
     Info: TCityInfo;
     adr: PCityList;
   end;
-procedure createCityList(head: PCityList);
+procedure createCityList(var head: PCityList);
 function insertCityList(head: PCityList; Name: string):PCityList;
 
 implementation
 
-procedure createCityList(head: PCityList);
+procedure createCityList(var head: PCityList);
 begin
   new(head);
   head^.adr := nil;
