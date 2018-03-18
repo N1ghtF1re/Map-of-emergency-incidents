@@ -90,7 +90,7 @@ procedure Xls_Open(XLSFile:string; var SitArr: TSitArr);
   xlCellTypeLastCell = $0000000B;
 var
   ExlApp, Sheet: OLEVariant;
-  j, r:integer;
+  j, c, r:integer;
   CI, SI: integer;
   tmp: string;
 begin
@@ -104,8 +104,14 @@ begin
 
   Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
+
+
   r := ExlApp.ActiveCell.Row;
+  c := ExlApp.ActiveCell.Column;
   SetLength(SitArr, r-2);
+  sheet.Range[Sheet.Cells[2,1],Sheet.Cells[r,c]].Sort
+  (Key1:=sheet.Range[Sheet.Cells[2,1],Sheet.Cells[r,1]], Order1:=1, Header:=0, OrderCustom:=1, MatchCase:=False, Orientation:=1, DataOption1:=0);
+
   for j:= 2 to r do
   begin
     SI:= 57+26;
@@ -121,6 +127,7 @@ begin
   end;
   tmp := #0;
 
+Excel.DisplayAlerts := False; // <-
  ExlApp.Quit;
 
  ExlApp := Unassigned;
@@ -259,7 +266,7 @@ begin
 
   creatingBasicColors(MassOfStandart, N, shift);
 
-  QuickSort( length(SitArr)-1, SitArr);
+  // QuickSort( length(SitArr)-1, SitArr);
 
   Colorik := TStringList.Create;
 
