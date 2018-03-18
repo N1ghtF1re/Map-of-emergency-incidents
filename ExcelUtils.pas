@@ -69,7 +69,7 @@ begin
         else
           SitNum := StrToInt(tmp[1]);
         inc(lastadr^.Info.Sit[SitNum]);
-      end
+      end;
 
       city := sheet.cells[j, CI];
       inc(j);
