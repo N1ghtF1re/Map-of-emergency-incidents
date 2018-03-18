@@ -195,14 +195,14 @@ begin
    // if not EOF(f) then
     read(f,Readtime);
 
-    Showmessage(TimeToStr(readtime));
-    Showmessage(TimeToStr(filelife));
+    {Showmessage(TimeToStr(readtime));
+        Showmessage(TimeToStr(filelife));}
 
     if (Readtime<>Filelife) then
     begin
     XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
     Xls_Open(XLSFile, CityHead);
-    showmessage('kek');
+    //showmessage('kek');
     end
     else
      readlol(CityHead,'kek.brakh');
