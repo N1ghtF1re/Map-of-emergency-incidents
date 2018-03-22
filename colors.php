@@ -19,7 +19,7 @@ function hexToRgb($color) {
             $color[1]. $color[1],
             $color[2]. $color[2]
         );
-    }else{
+    } else {
         return false; 
     }
  
