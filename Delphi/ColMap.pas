@@ -120,7 +120,7 @@ begin
           end;
       end;
       tmp^.Info.ResultColor := MixColors(Colorik, currN-1);
-      Memo.Visible := false;
+      //Memo.Visible := false;
 
       if k div 7 >= 1 then
       begin
@@ -195,7 +195,7 @@ begin
 
 
   try
-    showmessage(IntToStr( Integer( LighterColor(rgb(255,0,0)))), 40 );
+    //showmessage(IntToStr( Integer( LighterColor(rgb(255,0,0)))), 40 );
     CreateCityList(CityHead);
 
     N:=19;  // CHANGE PLS!!!!!!!!!!!
@@ -215,19 +215,22 @@ begin
     {Showmessage(TimeToStr(readtime));
         Showmessage(TimeToStr(filelife));}
 
-    if (Readtime<>Filelife) then
-    begin
+    {if (Readtime<>Filelife) then
+    begin}
     XLSFile := GetCurrentDir + '\kek.xlsx'; // Положение excel-файла
     Xls_Open(XLSFile, CityHead);
     //showmessage('kek');
-    end
+    {end
     else
-     readlol(CityHead,'kek.brakh');
+     readlol(CityHead,'kek.brakh');  }
+
+
 
     SetLength(MassOfStandart,N-1);
     shift := kek div n;
-
+    Memo1.Visible := true;
     creatingBasicColors(MassOfStandart, N, shift);
+
 
     // QuickSort( length(SitArr)-1, SitArr);
 
@@ -235,6 +238,10 @@ begin
     //maxVal := GetMaxVal(SitArr, N); // Максимальное значение происшествий в городе
 
     GetMaxVal(CityHead, MaxArr, N);
+    for I := 1 to N do
+    begin
+      Memo1.Lines.Add( inttostr(maxArr[i]) );
+    end;
     //MaxVal := maxWithArr(MaxArr);
     FillMap(CityHead, Colorik, {MaxVal}MaxArr, Memo1, Image1.Canvas);
 

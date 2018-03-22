@@ -45,9 +45,9 @@ $result = rgbToHex($colorRgb);
 var_dump($result);*/
 
 function getCityList($n) {
-	echo MixColors(array('#ff0000', '#00ff00')).'<br>';
+	/*echo MixColors(array('#ff0000', '#00ff00')).'<br>';
 	echo '<p style="color: #ff0000">Text</p>';
-	echo '<p style="color:'.LighterColor("#ff0000", 50).'">Text</p>';
+	echo '<p style="color:'.LighterColor("#ff0000", 50).'">Text</p>';*/
 
 	$CityList = array();
 	$MinskOblArr = array();
@@ -116,12 +116,64 @@ function getCityList($n) {
 	return $CityList; // Возврашаем список регионов 
 }
 
+function getMaxArr($List, $n) {
+	$MaxArr = array();
+	for ($i = 0; $i < $n; $i++) {
+		$MaxArr[$i] = $List[0]->arr[$i];
+	}
+
+	for ($i = 1; $i < count($List); $i++) {
+		for ($j = 0; $j < $n; $j++) {
+			if ($MaxArr[$j] < $List[$i]->arr[$j]) {
+				$MaxArr[$j] = $List[$i]->arr[$j];
+			}
+		}
+	}
+
+	return $MaxArr;
+}
+
 
 
 ### BEGIN ###
 
+
+
+$BasicColors = array(
+	'#ff0000',
+	'#ff4d00',
+	'#ff9a00',
+	'#ffe700',
+	'#caff00',
+	'#7dff00',
+	'#30ff00',
+	'#00ff1d',
+	'#00ff6a',
+	'#00ffb7',
+	'#00faff',
+	'#00adff',
+	'#0060ff',
+	'#0013ff',
+	'#3a00ff',
+	'#8700ff',
+	'#d400ff',
+	'#ff00dd',
+	'#ff0090');
 $n = 19;
+
+
+for ($i = 0; $i < $n; $i++) {
+	echo '<div style="height: 40px; width: 40px; display:inline-block; background:'.$BasicColors[$i].'"></div>'; 
+}
+echo '<div></div>';
 $CityList = getCityList($n);
+
+$MaxArr = getMaxArr($CityList, $n);
+for ($i = 0; $i < count($MaxArr); $i++) {
+	echo ''.($i+1).') '.$MaxArr[$i].'<br>';
+}
+
+
 for ($i = 0; $i < count($CityList); $i++) {
 	echo $CityList[$i]->name.' -  '.getOsmeID($CityList[$i]->name).' (';
 
@@ -133,3 +185,6 @@ for ($i = 0; $i < count($CityList); $i++) {
 
 	echo ")<br />";
 }
+
+
+
