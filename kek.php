@@ -13,13 +13,14 @@ include "osmID.php";
 // Класс региона
 class City { 
 	var $name;
+	var $color;
 	var $SitArr = array(); // Массив ситуаций. В каждом элементе N хранится, сколько ситуация N+1 повторялась раз 
-
 	function  __construct($n, $name){
 		$this->name = $name;
 		for ($i = 0; $i < $n; $i++) {
 			$arr[] = 0;
 		}
+		$this->color = 5;
 	}
 }
 
@@ -133,8 +134,18 @@ function getMaxArr($List, $n) {
 	return $MaxArr;
 }
 
-
-
+function getColors($arr, $BasicColors,$MaxArr, $n) {
+	$colorMap = array();
+	for ($j = 0; $j < $n; $j++) {
+		if ($arr[$j] != 0) {
+			$coef = Round( 100 - ( $arr[$j]  / $MaxArr[$j] ) * 100 );
+			$colorMap[] = LighterColor($BasicColors[$j], $coef);
+			//echo '<div style="display:inline-block; height: 10px; width: 10px; background: '.$BasicColors[$j].'"></div>';
+			//echo '<div style="display:inline-block; height: 10px; width: 10px; background: '.$colorMap[count($colorMap)-1].'"></div>';
+		}
+	}	
+	return MixColors($colorMap);
+}
 ### BEGIN ###
 
 
@@ -172,10 +183,12 @@ $MaxArr = getMaxArr($CityList, $n);
 for ($i = 0; $i < count($MaxArr); $i++) {
 	echo ''.($i+1).') '.$MaxArr[$i].'<br>';
 }
-
+echo '<br>';
 
 for ($i = 0; $i < count($CityList); $i++) {
-	echo $CityList[$i]->name.' -  '.getOsmeID($CityList[$i]->name).' (';
+	echo '<p style = "background: '.getColors($CityList[$i]->arr, $BasicColors,$MaxArr, $n).'">'.$CityList[$i]->name.' -  '.getOsmeID($CityList[$i]->name).' (';
+
+
 
 	for ($j = 0; $j < $n; $j++) {
 		echo $CityList[$i]->arr[$j] == 0 ? '0' : $CityList[$i]->arr[$j];
@@ -183,7 +196,7 @@ for ($i = 0; $i < count($CityList); $i++) {
 		echo ', ';
 	}
 
-	echo ")<br />";
+	echo ")</p>";
 }
 
 
