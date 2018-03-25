@@ -1,13 +1,12 @@
-
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Emergency map - лучшая карта чрезвычайных ситуаций Беларуси.</title>
+   <title>Emergency map - лучшая карта чрезвычайных ситуаций Беларуси.</title>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
      <script type="text/javascript" src="umd/index.js"></script>
-
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
 
 
 <?php
@@ -17,9 +16,10 @@
 
 include "colors.php";
 include "osmID.php";
+include "db.php";
 
 
-###PROCEDURES###
+### CLASSES ###
 
 
 // Класс региона
@@ -32,11 +32,40 @@ class City {
 		for ($i = 0; $i < $n; $i++) {
 			$arr[] = 0;
 		}
-		$this->color = 5;
+		$this->color = 0;
 	}
 }
 
-function readExelFile($filepath){
+
+### FUNCTIONS ###
+
+
+function isChangedFile($link, $file) {
+	$query = "SELECT DateValue FROM Settings WHERE Name = 'ExcelUpd'";
+
+	if ($result = mysqli_query($link, $query)) {
+
+	    /* выборка данных и помещение их в массив */
+	    $row = mysqli_fetch_assoc($result);
+	    $changedate = date ("Y-m-d H:i:s", filemtime($file));
+	    if ($row['DateValue'] !=  $changedate) {
+	    	mysqli_query($link, "UPDATE Settings SET DateValue = '$changedate' WHERE Name = 'ExcelUpd'");
+	    	return true;
+	    } else {
+	    	return false;
+	    }
+	    
+
+	    /* очищаем результирующий набор */
+	    mysqli_free_result($result);
+	}
+}
+
+function readExelFile($filepath, $link){
+
+	mysqli_query($link, "DELETE FROM situations");
+
+	//if ($mysqli->query("SELECT * FROM situations") === TRUE) echo 'kek';
 	require_once 'Classes/PHPExcel.php';
 	$ar=array(); // инициализируем массив
 
@@ -46,6 +75,50 @@ function readExelFile($filepath){
 	$ar = $objPHPExcel->getActiveSheet()->toArray(); // выгружаем данные из объекта в массив
 	unset($ar[0]); // 0 строка - заголовки таблицы
 	sort($ar); 
+
+	for ($i = 0; $i < count($ar); $i++) {
+		$region = $ar[$i][0];
+		$predfixes = array('г ', 'д ', 'гп ', 'снп ', 'п ', 'х ');
+		$city = str_replace($predfixes, '', $ar[$i][2]);
+
+		$date = $ar[$i][5];
+		$date = date('Y-m-d', strtotime(str_replace('-', '/', $date)));
+
+		$sit = $ar[$i][57+25];
+		if (($sit[1] >= '0') && ($sit[1] <= '9')) {
+			$sit = $sit[0].$sit[1];
+		} else {
+			$sit = $sit[0];
+		}
+
+		$result = mysqli_query($link, "INSERT INTO situations (Region, City, Date, Situation) VALUES ('$region', '$city', '$date', '$sit')");
+		if (!$result) {
+			echo 'Query error'."INSERT INTO situations (Region, City, Date, Situation) VALUES ('$region', '$city', '$date', '$sit')".'<br>';
+		}
+
+		if ($result = mysqli_query($link, "SELECT * FROM RegionList WHERE Name = '$region'")) {
+		    //printf("Select вернул %d строк.\n", mysqli_num_rows($result));
+			if (mysqli_num_rows($result) == 0) {
+			    $osme = APIgetOsmeID($region);
+			    $name = $region;
+				mysqli_query($link, "INSERT INTO RegionList (OSMeID, Name) VALUES ('$osme', '$name')");
+			}
+
+		}
+
+		if ($result = mysqli_query($link, "SELECT * FROM CityList WHERE Name = '$city'")) {
+		    //printf("Select вернул %d строк.\n", mysqli_num_rows($result));
+			if (mysqli_num_rows($result) == 0) {
+			    $osme = APIgetOsmeID($city);
+			    $name = $city;
+				mysqli_query($link, "INSERT INTO CityList (OSMeID, Name) VALUES ('$osme', '$name')");
+			}
+
+		}
+
+
+	}
+
 	return $ar; //возвращаем массив
 }
 
@@ -57,14 +130,59 @@ $colorRgb = array(255, 0, 0);
 $result = rgbToHex($colorRgb);
 var_dump($result);*/
 
-function getCityList($n) {
+function getCityListNEW($n, $link) {
 	/*echo MixColors(array('#ff0000', '#00ff00')).'<br>';
 	echo '<p style="color: #ff0000">Text</p>';
 	echo '<p style="color:'.LighterColor("#ff0000", 50).'">Text</p>';*/
 
 	$CityList = array();
 	$MinskOblArr = array();
-	$ExcArr=readExelFile('kek.xlsx'); // Читаем эксель
+	if (isChangedFile($link,'kek.xlsx')) {
+		$ExcArr=readExelFile('kek.xlsx', $link);
+		return getCityList($n, $link);
+	};
+	 // Читаем эксель
+
+	$result = mysqli_query($link, "SELECT * FROM situations LIMIT 1");
+	$cn =  mysqli_fetch_assoc($result);
+	$currname = $cn['Region'];
+	$CityList[] = new City($n, $currname);
+
+	$result = mysqli_query($link, "SELECT * FROM situations");
+	while($SitRow = mysqli_fetch_assoc($result) ){ 
+		
+		
+
+		if ($currname == $SitRow['Region']) {
+				$CityList[count($CityList)-1]->arr[$SitRow['Situation']]++;
+		} else {
+			//echo $currname;
+			$currname = $SitRow['Region'];
+			$CityList[] = new City($n, $currname);
+		}
+		
+		
+
+
+
+		//$city = $ExcArr[$i][0];
+	}
+
+	return $CityList; // Возврашаем список регионов 
+}
+
+function getCityList($n, $link) {
+	/*echo MixColors(array('#ff0000', '#00ff00')).'<br>';
+	echo '<p style="color: #ff0000">Text</p>';
+	echo '<p style="color:'.LighterColor("#ff0000", 50).'">Text</p>';*/
+
+	$CityList = array();
+	$MinskOblArr = array();
+	if (isChangedFile($link,'kek.xlsx')) {
+
+		echo 'kek';
+	};
+	$ExcArr=readExelFile('kek.xlsx', $link); // Читаем эксель
 
 	$currname = $ExcArr[0][0];
 	for ($i = 0; $i < count($ExcArr); $i++) {
@@ -87,8 +205,8 @@ function getCityList($n) {
 				$CityList[count($CityList)-1]->arr[$Situation-1]++;
 				//echo $currname;
 			} else {
-				$ExcArr[$i][2] = str_replace('г ', '', $ExcArr[$i][2]);
-				$ExcArr[$i][2] = str_replace(' ', '', $ExcArr[$i][2]);
+				$predfixes = array('г ', 'д ', 'гп ', 'снп ', 'п ', 'х ');
+				$ExcArr[$i][2] = str_replace($predfixes, '', $ExcArr[$i][2]);
 				$MinskOblArr[] = $ExcArr[$i];
 			}
 			$i++;
@@ -190,7 +308,7 @@ for ($i = 0; $i < $n; $i++) {
 }
 echo '<div></div>';
 */
-$CityList = getCityList($n);
+$CityList = getCityListNEW($n, $link);
 
 $MaxArr = getMaxArr($CityList, $n);
 
@@ -224,25 +342,27 @@ echo " <script>
 ymaps.ready(init);
 
 function init () {
-    // Создание экземпляра карты и его привязка к контейнеру с
-    // заданным id (\"map\").
     geoMap1 = new ymaps.Map('map', {
-        // При инициализации карты обязательно нужно указать
-        // её центр и коэффициент масштабирования.
       center: [53.5, 27],
       type: \"yandex#map\",
-      zoom: 7
+      zoom: 7,
+      controls: ['zoomControl', 'typeSelector',  'fullscreenControl']
     }, {
         searchControlProvider: 'yandex#search'
     });";
+
+   $kek = '';
 for ($i = 0; $i < count($CityList); $i++) {
-		echo "osme.geoJSON('".getOsmeID($CityList[$i]->name)."', {lang: 'ru', quality:2}, function (data) {
-      var collection1 = osme.toYandex(data, ymaps);
-      collection1.setStyles(() => ({opacity:0.9, fillColor:'".getColors($CityList[$i]->arr, $BasicColors,$MaxArr, $n)."'}));
-      collection1.add(geoMap1);
+	  $kek = $kek."osme.geoJSON('".getOsmeID($CityList[$i]->name)."', {lang: 'ru', quality:2}, function (data) {
+      var collection".$i." = osme.toYandex(data, ymaps);
+      collection".$i.".setStyles(() => ({opacity:0.5, fillColor:'".getColors($CityList[$i]->arr, $BasicColors,$MaxArr, $n)."'}));
+      collection".$i.".add(geoMap1);
     });";
 
 }
+
+
+echo $kek;
 
 /*echo "osme.geoJSON('BY-HM', {lang: 'ru', quality:2}, function (data) {
       var collection1 = osme.toYandex(data, ymaps);
@@ -268,11 +388,56 @@ echo "}
             width: 100%;
             height: 90%;
         }
+        .menu {
+        	margin: 0;	
+        	padding: 0;	
+        	list-style: 0;
+        	height: 10%;
+        	background: #3f51b5;
+        	display: table;
+    		width: 100%;
+        }
+        .menu div {
+		    font-family: sans-serif;
+		    font-size: 24px;
+		    color: #fff;
+		    vertical-align: middle;
+		    padding-left: 20px;
+		    display: table-cell;
+		}
+		.mn {
+			padding-right: 40px;
+			padding: 0;	
+			margin: 0;	
+			height: 10%;	
+			list-style: none;
+			display: table-cell;
+			width: 200px;
+			vertical-align: middle;
+		}
+		.mn li {
+			display: inline-block;
+			font-size: 32px;
+		}
+		.mn li a{
+			color: #fff !important;
+		}
     </style>
 </head>
 
 <body>
+<duv class="menu">
+	<div>BrakhMen Emergency Map</div>
+<ul class="mn">
+	<li><a href="https://brakhmen.info/" target="_blank"><i class="fas fa-home"></i></a></li>
+	<li><a href="https://vk.com/brakhmen" target="_blank"><i class="fab fa-vk"></i></a></li>
+	<li><a href="https://github.com/N1ghtF1re/Map-of-emergency-incidents" target="_blank"><i class="fab fa-github"></i></a></li>
+</ul>
+</duv>
 <div id="map"></div>
 </body>
 
 </html>
+<?php 
+
+?>
