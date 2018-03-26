@@ -7,16 +7,35 @@
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
      <script type="text/javascript" src="umd/index.js"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 
 
 <?php
+$n = $_GET["n"];
+if ($n == '') {
+	$n = 19;
+}
+switch ($n) {
+	case 3:
+	case 6:
+	case 9:
+	case 19:
+	break;
 
+	default: 
+	header("Location: https://brakhmen.info/map/emergency-map.php");
+}
 
 ### INCLUDES ###
 
 include "colors.php";
 include "osmID.php";
 include "db.php";
+include "basiccolors.php";
+include "getIndex.php";
 
 
 ### CLASSES ###
@@ -38,7 +57,6 @@ class City {
 
 
 ### FUNCTIONS ###
-
 
 function isChangedFile($link, $file) {
 	$query = "SELECT DateValue FROM Settings WHERE Name = 'ExcelUpd'";
@@ -153,8 +171,14 @@ function getCityListNEW($n, $link) {
 		
 		
 
+
 		if ($currname == $SitRow['Region']) {
-				$CityList[count($CityList)-1]->arr[$SitRow['Situation']]++;
+				$index = getIndex($n, $SitRow['Situation']);
+				//echo $index;
+				if ($index == -1) {
+					$index = $SitRow['Situation'];
+				}
+				$CityList[count($CityList)-1]->arr[$index]++;
 		} else {
 			//echo $currname;
 			$currname = $SitRow['Region'];
@@ -279,29 +303,10 @@ function getColors($arr, $BasicColors,$MaxArr, $n) {
 ### BEGIN ###
 
 
+ 
+//$n = 19;
 
-$BasicColors = array(
-	'#ff0000',
-	'#ff4d00',
-	'#ff9a00',
-	'#ffe700',
-	'#caff00',
-	'#7dff00',
-	'#30ff00',
-	'#00ff1d',
-	'#00ff6a',
-	'#00ffb7',
-	'#00faff',
-	'#00adff',
-	'#0060ff',
-	'#0013ff',
-	'#3a00ff',
-	'#8700ff',
-	'#d400ff',
-	'#ff00dd',
-	'#ff0090');
-$n = 19;
-
+$BasicColors = getBasicColors($n);
 /*
 for ($i = 0; $i < $n; $i++) {
 	echo '<div style="height: 40px; width: 40px; display:inline-block; background:'.$BasicColors[$i].'"></div>'; 
@@ -422,13 +427,53 @@ echo "}
 		.mn li a{
 			color: #fff !important;
 		}
+		#options {
+		z-index: 999;
+		background: #fff;
+        width: 300px;
+        height: 280px;
+        text-align: left;
+		font-size: 18px;
+        padding: 15px;
+        border: 1px solid #3f51b5;
+        border-radius: 2px;
+        color: #3f51b5;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+      }
+      #options ul {
+      	list-style: none;
+      	padding: 0;
+      	margin: 0;
+      }
+      #options a {
+      	text-decoration: none;
+      	color:  #3f51b5;
+      }
     </style>
 </head>
 
 <body>
 <duv class="menu">
 	<div>BrakhMen Emergency Map</div>
+
+<div id="options" style="display: none">
+	<h2> Выберите количество групп ситуаций </h2>
+	<ul>
+		<li><a href="https://brakhmen.info/map/emergency-map.php?n=3">3</a></li>
+		<li><a href="https://brakhmen.info/map/emergency-map.php?n=6">6</a></li>
+		<li><a href="https://brakhmen.info/map/emergency-map.php?n=9">9</a></li>
+		<li><a href="https://brakhmen.info/map/emergency-map.php?n=19">19</a></li>
+	</ul>
+	<br><br>
+	<a onclick='$( "#options" ).hide();'>Закрыть</a>
+</div>
 <ul class="mn">
+	<li><a href="#" onclick='$( "#options" ).toggle();''><i class="fas fa-sort-numeric-up"></i></a></li>
 	<li><a href="https://brakhmen.info/" target="_blank"><i class="fas fa-home"></i></a></li>
 	<li><a href="https://vk.com/brakhmen" target="_blank"><i class="fab fa-vk"></i></a></li>
 	<li><a href="https://github.com/N1ghtF1re/Map-of-emergency-incidents" target="_blank"><i class="fab fa-github"></i></a></li>
