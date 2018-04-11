@@ -1,5 +1,5 @@
 <?php
-$link = mysqli_connect("mysql.hostinger.ru", "u903425936_emerg", "brakhkek", "u903425936_emerg");
+$link = mysqli_connect($db_host, $db_user, $db_password, $db_database);
 
 /* проверяем соединение */
 if (mysqli_connect_errno()) {
@@ -21,5 +21,3 @@ if (mysqli_connect_errno()) {
     //printf("Default database is %s.\n", $row[0]);
     $result->close();
 }*/
-
-

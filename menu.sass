@@ -1,0 +1,132 @@
+
+// position: left or right
+// width: unit px
+// backgroundColor
+// duration: unit ms
+$elastic: (
+  position: left,
+  width: 300,
+  backgroundColor: #7c7fe0,
+  duration: 300,
+);
+
+
+// get key
+$position: map-get($elastic, 'position');
+$width: map-get($elastic, 'width');
+$backgroundColor: map-get($elastic, 'backgroundColor');
+$duration: map-get($elastic, 'duration');
+// css button
+#show {
+  background-color: $backgroundColor;
+  border: 0;
+  color: #fff;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Start
+.navigation {
+  position: fixed;
+  width: $width*1px;
+  height: 100%;
+  top: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 99;
+  transition-delay: $duration*1ms;
+  @if ($position == right) {
+    right: 0;
+  } @else if ($position == left) {
+    left: 0;
+  }
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+    .navigation__inner {
+      background-color: $backgroundColor;
+      transform: translate(0, 0);
+      transition: transform $duration*1ms linear, background-color 0s linear ($duration*2-1)*1ms;
+      &:after {
+        width: 300%;
+        border-radius: 50%;
+        animation: elastic ($duration/2)*1ms ease ($duration+0.5)*1ms both;
+      }
+    }
+  }
+}
+.navigation__inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 999999;
+  @if ($position == right) {
+    transform: translate(100%, 0);
+  } @else if ($position == left) {
+    transform: translate(-100%, 0);
+  }
+  transition: transform $duration*1ms linear, background-color 0s linear $duration*1ms;
+  &:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    @if ($position == right) {
+      left: 0;
+    } @else if ($position == left) {
+      right: 0;
+    }
+    background-color: $backgroundColor;
+    border-radius: 50%;
+    z-index: -1;
+    transition: all $duration*1ms linear;
+    
+  }
+}
+
+@keyframes elastic {
+    0% {
+        border-radius: 50%;
+    }
+    45% {
+        border-radius: 0;
+    }
+    65% {
+        @if ($position == right) {
+          border-top-left-radius: 40px 50%;
+          border-bottom-left-radius: 40px 50%;
+        } @else if ($position == left) {
+          border-top-right-radius: 40px 50%;
+          border-bottom-right-radius: 40px 50%;
+        }
+    }
+    80% {
+        border-radius: 0;
+    }
+    90% {
+        @if ($position == right) {
+          border-top-left-radius: 20px 50%;
+          border-bottom-left-radius: 20px 50%;
+        } @else if ($position == left) {
+          border-top-right-radius: 20px 50%;
+          border-bottom-right-radius: 20px 50%;
+        }
+    }
+    100% {
+        border-radius: 0;
+    }
+}

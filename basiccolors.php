@@ -1,5 +1,4 @@
 <?php 
-
 function getBasicColors ($n) {
 
     $colors = array(
@@ -11,7 +10,7 @@ function getBasicColors ($n) {
     
     $basiccolor[] = $colors;
    
-    $kek = 255*5.78;
+    $kek = 255*5.22;
     $shift = round($kek / $n);
     
     $trg_plus = True;
