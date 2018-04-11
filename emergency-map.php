@@ -10,27 +10,27 @@
 	<link href="css/jquery-confirm.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/menu.css">
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
-  <script src="jquery-confirm.js"></script>
+  <script src="js/jquery-confirm.js"></script>
   <link rel="stylesheet" href="css/check.css">
   <link rel="stylesheet" href="css/main.css">
 
 <?php
 ### GET PARAMETRES ###
 
-include "getParams.php";
+include "includes/getParams.php";
 
 $ParamObj = getAllParams();
 
 ### INCLUDES ###
 
 include "config.php";
-include "colors.php";
+include "includes/colors.php";
 // include "osmID.php";
-include "db.php";
-include "basiccolors.php";
-include "getIndex.php";
-include "SitSort.php";
-include "EmergencyMapAPI.php";
+include "includes/db.php";
+include "includes/basiccolors.php";
+include "includes/getIndex.php";
+include "includes/SitSort.php";
+include "includes/EmergencyMapAPI.php";
 
 ### BEGIN ###
 
