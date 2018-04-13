@@ -7,17 +7,23 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-/*
-$mysqli = new mysqli("mysql.hostinger.ru", "u903425936_emerg", "brakhkek", "u903425936_emerg");
+function getMaxN($link, $tablename) {
+  $result = mysqli_query($link, "SELECT Max(Situation) FROM ".$tablename."");
+  $res_assoc=  mysqli_fetch_assoc($result);
+  $maxn = $res_assoc["Max(Situation)"];
+  return $maxn;
+}
 
+function getMaxYear($link, $tablename) {
+    $result = mysqli_query($link, "SELECT Max(age) FROM ".$tablename."");
+    $res_assoc=  mysqli_fetch_assoc($result);
+    $maxyear = $res_assoc["Max(age)"];
+    return $maxyear;
+}
 
-if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
-    exit();
-}*/
-
-/*if ($result = $mysqli->query("SELECT DATABASE()")) {
-    $row = $result->fetch_row();
-    //printf("Default database is %s.\n", $row[0]);
-    $result->close();
-}*/
+function getMinYear($link, $tablename) {
+    $result = mysqli_query($link, "SELECT Min(age) FROM ".$tablename."");
+    $res_assoc=  mysqli_fetch_assoc($result);
+    $minyear = $res_assoc["Min(age)"];
+    return $minyear;
+}

@@ -38,7 +38,7 @@
   }
 
   function formNsortarray ($link,  $ParamObj){
-     $age = $ParamObj->age;
+     $year = $ParamObj->year;
      $n = $ParamObj->n;
      $CauseArr = array();
      $lol = array();
@@ -46,7 +46,7 @@
     for  ($i = 0; $i < $n; $i++) {
     // MYSQLI QUERY
       $m = $i + 1;
-      $result = mysqli_query($link, "SELECT COUNT(*) FROM SitList WHERE age = '$age' AND situation = '$m'");
+      $result = mysqli_query($link, "SELECT COUNT(*) FROM SitList WHERE year = '$year' AND situation = '$m'");
       $kek =  mysqli_fetch_assoc($result);
       $CauseArr[$i] = $kek['COUNT(*)'];
       $lol[$i] = $i;

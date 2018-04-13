@@ -1,101 +1,49 @@
 <?php
 
-
-function getSitIndexArr($n, $sit) {
-	switch ($n) {
-		case 6:
-		switch ($sit) {
-			case 0:
-				return array(2,4,11);
-			break;
-
-			case 1:
-				return array(7,8,9);
-			break;
-
-			case 2:
-				return array(17,18,19);
-			break;
-
-			case 3:
-				return array(1, 5,12);
-			break;
-
-			case 4:
-				return array(10,13,14);
-			break;
-
-			case 5:
-				return array(15, 16,3);
-			break;
-
+function getSitIndexArr($n,$sit,$maxn){ // Example: {n = 6; sit = 0..5}; n - на сколько массивов делить; sit - какой массив запрашивают
+	$kek = intdiv($maxn,$n);	//Целочисленное деления (20/6) = 3 сколько элементов в норм масиве
+	$lol = $maxn % $n; //	Деление по модулю,	Целочисленный остаток от деления (20%6) = 2 - сколько элементов надо распихать
+	$keklol = $kek*$sit;
+	$arrayRet = array();
+	if (($sit+1)<=$lol){
+		for ($i = $keklol+1+$sit; $i<=$keklol+$kek+1+$sit ;$i++){
+		$arrayRet[] = $i;
 		}
-		break;
-
-		case 9:
-		switch ($sit) {
-			case 0:
-				return array(2,4);
-			break;
-
-			case 1:
-				return array(11,8);
-			break;
-
-			case 2:
-				return array(7,9);
-			break;
-
-			case 3:
-				return array(17,3,6);
-			break;
-
-			case 4:
-				return array(18,19);
-			break;
-
-			case 5:
-				return array(1,5);
-			break;
-
-			case 6:
-				return array(12,14);
-			break;
-			case 7:
-				return array(10,13);
-			break;
-			case 8:
-				return array(15,16);
-			break;
-
-
-		}
-		break;
-
-		case 3:
-		switch ($sit) {
-			case 0:
-				return array(1,5,10,13,14);
-			break;
-
-			case 1:
-				return array(15,16,17,18,19,2,3);
-			break;
-
-			case 2:
-				return array(4,7,8,9,11,12);
-			break;
-		}
-		break;
-
-
-
+		return $arrayRet;
 	}
-
+	else {
+	for($i = $keklol+1+$lol; $i<=$keklol+$kek+$lol ;$i++){
+		$arrayRet[] = $i;
+	}
+	return 	$arrayRet;
+	}
 }
 
-
-function getIndex($n, $sit) {
+//
+//kek = 3
+//  1 2 3 4 5 6 .. 19
+//19 / 6 = 3
+// $sit=0(1,2,3,4),$sit=1(5,6,7), $sit=2(8,9,10) $sit=3(11,12,13) $sit=4(14,15,16) $sit=5(17,18,19)
+// n = 6; sit = 0..$maxn; n - на сколько массивов поделено; sit - ситуация, нужно вернуть в каком по счёту массиве
+function getIndex($n,$pos,$maxn){
+	$kek = intdiv($maxn,$n);	//Целочисленное деления (19/6) = 3 сколько элементов в норм масиве
+	$lol = $maxn % $n; //	Деление по модулю,	Целочисленный остаток от деления (19%6) = 1 - сколько элементов надо распихать
+	$sit = intdiv($pos,$kek); // 6/4 = 1;
+	if (($sit+1)<=$lol){		 //2<=1
+		if ((($pos%$kek)==1) && ($sit>=1)) {  //6%3 == 1 && sit >=1
+		return ($sit-1);
+	}
+		else
+		{
+			return $sit;
+		}
+	}
+	else {
+			if (($pos%$kek)==($lol+1)) {return $sit;}
+		return $sit-1;
+	}
+}
+function getIndexkek($n, $sit) {
 				switch ($n) {
 
 					case 6:

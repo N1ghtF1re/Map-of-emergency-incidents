@@ -21,21 +21,21 @@ class City {
 ### FUNCTIONS ###
 
 // Полачем название ситуации
-function getSitName ($SituationNameArr, $id, $n, $SitSortArr, $sort) {
+function getSitName ($SituationNameArr, $id, $n, $SitSortArr, $sort,$maxn) {
+    $arr = getSitIndexArr($n, $id, $maxn);
+		//echo $n.",".$id.",".$maxn;
+		//print_r($arr);
 
-    $arr = getSitIndexArr($n, $id);
-
-
-    if ($n == 19) {
+    if ($n == $maxn) {
       if ($sort == 'off') {
         return $SituationNameArr[$id];
       } else {
         return $SituationNameArr[$SitSortArr[$id]];
       }
-    } else { // Если n != 19 => ситуации группируются и нужно вывести все ситуации в группе
-      $mems = $SituationNameArr[$arr[0]];
+    } else { // Если $n != $maxn => ситуации группируются и нужно вывести все ситуации в группе
+      $mems = $SituationNameArr[$arr[0]-1];
       for ($i = 1; $i < count($arr); $i++) {
-          $mems = $mems.', '.$SituationNameArr[$arr[$i]];
+          $mems = $mems.', '.$SituationNameArr[$arr[$i]-1];
       }
       return $mems;
     }
@@ -54,28 +54,6 @@ function getRor($num, $shift, $n) {
 	return $res;
 
 }
-
-function isChangedFile($link, $file) {
-	$query = "SELECT DateValue FROM Settings WHERE Name = 'ExcelUpd'";
-
-	if ($result = mysqli_query($link, $query)) {
-
-	    /* выборка данных и помещение их в массив */
-	    $row = mysqli_fetch_assoc($result);
-	    $changedate = date ("Y-m-d H:i:s", filemtime($file));
-	    if ($row['DateValue'] !=  $changedate) {
-	    	mysqli_query($link, "UPDATE Settings SET DateValue = '$changedate' WHERE Name = 'ExcelUpd'");
-	    	return true;
-	    } else {
-	    	return false;
-	    }
-
-
-	    /* очищаем результирующий набор */
-	    mysqli_free_result($result);
-	}
-}
-
 
 // Получаем массив максимальных значений
 function getMaxArr($List, $n) {
@@ -110,25 +88,29 @@ function getColors($arr, $BasicColors,$MaxArr, $n, $ror) {
 
 
 // Получаем список регионов
-function getCityListNEW($tablename, $link, $SitSortArr, $ParamObj) {
+function getCityListNEW($tablename, $link, $SitSortArr, $ParamObj, $maxn) {
 	$n = $ParamObj->n;
 	$age = $ParamObj->age;
 	$resp = $ParamObj->resp;
+	$minDate = $ParamObj->minDate;
+	$maxDate = $ParamObj->maxDate;
 
+	//echo $minDate;
+	//echo $maxDate;
 	$CityList = array();
-
+//echo "SELECT * FROM ".$tablename." WHERE DATE(Date) > '$minDate' AND DATE(Date) < '$maxDate'  ORDER BY Region";
   if ($resp == 'off') {
-	   $result = mysqli_query($link, "SELECT * FROM ".$tablename." WHERE age = '$age' ORDER BY Region LIMIT 1");
+	   $result = mysqli_query($link, "SELECT * FROM ".$tablename." WHERE DATE(Date) >= '$minDate' AND DATE(Date) < '$maxDate'  ORDER BY Region LIMIT 1");
   } else {
-     $result = mysqli_query($link, "SELECT * FROM Respublic WHERE age = '$age' ORDER BY Region LIMIT 1");
+     $result = mysqli_query($link, "SELECT * FROM Respublic  WHERE DATE(Date) >= '$minDate' AND DATE(Date) < '$maxDate' ORDER BY Region LIMIT 1");
   }
 	$cn =  mysqli_fetch_assoc($result);
 	$currname = $cn['Region'];
 	$CityList[] = new City($n, $currname);
   if ($resp == 'off') {
-	   $result = mysqli_query($link, "SELECT * FROM ".$tablename." WHERE age = '$age' ORDER BY Region");
+	   $result = mysqli_query($link, "SELECT * FROM ".$tablename." WHERE DATE(Date) >= '$minDate' AND DATE(Date) < '$maxDate'  ORDER BY Region");
   } else {
-    $result = mysqli_query($link, "SELECT * FROM Respublic WHERE age = '$age' ORDER BY Region");
+    $result = mysqli_query($link, "SELECT * FROM Respublic  WHERE DATE(Date) >= '$minDate' AND DATE(Date) < '$maxDate' ORDER BY Region");
   }
 	while($SitRow = mysqli_fetch_assoc($result) ){
     if(stristr($SitRow['Region'], 'ОБЛАСТЬ') !== FALSE) {
@@ -136,7 +118,7 @@ function getCityListNEW($tablename, $link, $SitSortArr, $ParamObj) {
     }
 
 		if ($currname == $SitRow['Region']) {
-				$index = getIndex($n, $SitRow['Situation']);
+				$index = getIndex($n, $SitRow['Situation'], $maxn);
 				//echo $index;
 				if ($index == -1) {
 					$index = $SitRow['Situation']-1;
@@ -149,7 +131,7 @@ function getCityListNEW($tablename, $link, $SitSortArr, $ParamObj) {
 			//echo $currname;
 			$currname = $SitRow['Region'];
 			$CityList[] = new City($n, $currname);
-			$index = getIndex($n, $SitRow['Situation']);
+			$index = getIndex($n, $SitRow['Situation'], $maxn);
 				//echo $index;
 				if ($index == -1) {
 					$index = $SitRow['Situation']-1;
@@ -169,8 +151,7 @@ function getCityListNEW($tablename, $link, $SitSortArr, $ParamObj) {
 
 	return $CityList; // Возврашаем список регионов
 }
-
-function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxArr, $ParamObj) {
+function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxArr, $ParamObj,$maxn) {
 	$n = $ParamObj->n;
 	$ror = $ParamObj->ror;
 	$sort = $ParamObj->sort;
@@ -248,18 +229,19 @@ function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxAr
 
 
 
-	       $kek = '';
+	$kek = '';
 	for ($i = 0; $i < count($CityList); $i++) {
 						$mem = '\n';
 						// Получаем, сколько раз каждая ситуация повторяется
 	                    for ($j = 0; $j < $n; $j++) {
 	                    	$count = $CityList[$i]->arr[$j] == 0 ? 0 : $CityList[$i]->arr[$j];
 	                    	$mem = $mem.'<div> <div style="height: 10px; width: 10px; margin-right: 5px; display: inline-block; background: '.$BasicColors[getRor($j, $ror, $n)].'"></div>';
-	                      	$mem = $mem.getSitName($SituationNameArr, $j, $n, $SitSortArr,$sort).' - <b>'.$count.'</b> раз</div>';
+	                      	$mem = $mem.getSitName($SituationNameArr, $j, $n, $SitSortArr,$sort, $maxn).' - <b>'.$count.'</b> раз</div>';
 	                    }
-
+		  if ($CityList[$i]->name != '') {
 		  $kek = $kek."ShowCity('".$CityList[$i]->name."','".getColors($CityList[$i]->arr, $BasicColors,$MaxArr, $n, $ror)."', '".$mem."');"; // Формируем JS-код, вызывающий функцию, которая будет отрисовывать города/районы на карте
 // ($CityList, $BasicColors, $SitSortArr, $sort, $MaxArr, $n, $ror)
+		}
 	}
 	echo $kek;
 
@@ -286,9 +268,9 @@ function writeGroupList($ParamObj){
 
 
 
-function writeAgeList($ParamObj) {
+function writeAgeList($ParamObj, $minYear, $maxYear) {
 	$currobj = clone $ParamObj;
-	for ($i = 2005; $i <= 2016; $i++) {
+	for ($i = $minYear; $i <= $maxYear; $i++) {
 		echo '<li><a';
 		if ($i == $ParamObj->age) {
 			echo " class='selected'";
@@ -321,5 +303,12 @@ function writeColorsList($ParamObj, $BasicColors) {
 	}
 	unset($currobj);
 }
+
+function mysqlDateToPhpDate($date) {
+	$newdate = strtotime($date);
+	$newdate = date( 'd.m.Y', $newdate );
+	return $newdate;
+}
+
 
  ?>
