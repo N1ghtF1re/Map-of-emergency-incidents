@@ -2,10 +2,10 @@
 
 
 // Database host, username and password.
-$db_host = 'mysql.hostinger.ru';
-$db_user = 'u903425936_emerg';
-$db_password = 'brakhkek';
-$db_database = 'u903425936_emerg';
+$db_host = 'host';
+$db_user = 'user';
+$db_password = 'password';
+$db_database = 'db';
 
 
 // Spreadsheet that stores information about every situation (their position, date, etc.)
