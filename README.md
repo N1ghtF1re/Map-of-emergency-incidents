@@ -21,7 +21,7 @@ Developed solution allows to visualize multidimensional information effectively.
 **Languages:**  PHP(server part), JS(client part),HTML+CSS(markup + style), SQL(Database requests).<br>
 **DBMS:** MySQL<br>
 **Third-party APIs:** Yandex map API (map rendering, polygon coloring, polygon click actions), Nominatim API(obtaining requested geographical region polygon).<br>
-**Use example:** site brakh.men<br>
+**Use example:** site brakh.men/map<br>
 
 ## How to use
 
