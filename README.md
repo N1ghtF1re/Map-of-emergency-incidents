@@ -53,7 +53,7 @@ Yaer - year of origin of the situation (For convenience of sorting by years)<br>
 
 ## Developers
 
-In the development of this chic service involved:
+In the development of this service involved:
 + [**Pankratiew Alexandr**](https://vk.com/sasha_pankratiew)
 + [**Holubeu Kiryl**](https://vk.com/smertowing)
 + [**Pilinko Nikita**](https://vk.com/mineralsfree)
