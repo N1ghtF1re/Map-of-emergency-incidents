@@ -50,3 +50,10 @@ Situation - situation number. (Each situation is assigned a unique number)<br>
 Yaer - year of origin of the situation (For convenience of sorting by years)<br>
 <br><br>
 **Config.php** file have to be filled
+
+## Developers
+
+In the development of this chic game involved:
++ [**Pankratiew Alexandr**](https://vk.com/sasha_pankratiew)
++ [**Holubeu Kiryl**](https://vk.com/smertowing)
++ [**Pilinko Nikita**](https://vk.com/mineralsfree)
