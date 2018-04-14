@@ -37,18 +37,21 @@
   }
   }
 
-  function formNsortarray ($link,  $ParamObj){
-     $year = $ParamObj->year;
+  function formNsortarray ($link,  $ParamObj, $tablename){
+     $year = $ParamObj->age;
      $n = $ParamObj->n;
+     $minDate = $ParamObj->minDate;
+     $maxDate = $ParamObj->maxDate;
      $CauseArr = array();
      $lol = array();
 
     for  ($i = 0; $i < $n; $i++) {
     // MYSQLI QUERY
       $m = $i + 1;
-      $result = mysqli_query($link, "SELECT COUNT(*) FROM SitList WHERE year = '$year' AND situation = '$m'");
+      //echo "SELECT COUNT(1) FROM SitList WHERE year = '$year' AND situation = '$m'";
+      $result = mysqli_query($link, "SELECT COUNT(1) FROM ".$tablename." WHERE DATE(Date) >= '$minDate' AND DATE(Date) < '$maxDate' AND situation = '$m'");
       $kek =  mysqli_fetch_assoc($result);
-      $CauseArr[$i] = $kek['COUNT(*)'];
+      $CauseArr[$i] = $kek['COUNT(1)'];
       $lol[$i] = $i;
 
     }  //HELLO WORLD
