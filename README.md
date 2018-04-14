@@ -18,7 +18,7 @@ At the moment, there are services that solve individual tasks of visualizing dat
 Developed solution allows to visualize multidimensional information effectively.It has an user-friendly interface. Code is easy to modify for any sphere of usage. Application of color mixing enhances perception and analyzation of information.
 
 ## Used technologies
-**Languages:**  PHP(server part), JS(client part),HTML+CSS(markup + style), SQL(Database requests).
+**Languages:**  PHP(server part), JS(client part),HTML+CSS(markup + style), SQL(Database requests).<br>
 **DBMS:** MySQL
 **Third-party APIs:** Yandex map API (map rendering, polygon coloring, polygon click actions), Nominatim API(obtaining requested geographical region polygon).
 **Use example:** site brakh.men
