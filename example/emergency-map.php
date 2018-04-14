@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="css/main.css">
 
 <?php
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ### INCLUDES ###
 
 include "config.php"; // CONFIG FILE
@@ -63,7 +64,7 @@ include "includes/EmergencyMapAPI.php";
 $BasicColors = getBasicColors($ParamObj->n);
 
 // Получаем массив, в каком порядке нужно сортировать ситуации
-$SitSortArr = formNsortarray($link,  $ParamObj);
+$SitSortArr = formNsortarray($link,  $ParamObj, $tablename);
 
 // Получаем массив регионов из БД
 $CityList = getCityListNEW($tablename, $link, $SitSortArr, $ParamObj, $maxn);
@@ -91,6 +92,13 @@ writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxArr, $Param
     border-color: #572da2;
     margin-top: 4px;
   }
+
+  @media (min-width: 992px) {
+  .jconfirm .col-md-6 {
+    width: 60%;
+    margin-left: 20% !important;
+}
+}
 </style>
 </head>
 

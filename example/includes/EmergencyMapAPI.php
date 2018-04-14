@@ -158,10 +158,10 @@ function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxAr
 	echo '<script>
 		ymaps.ready(function() {
 
-	   function ShowCity(Keks, color, mem) {
-	   	Keks += ", Беларусь";
+	   function ShowCity(Region, color, desc) {
+	   	Region += ", Беларусь";
 	   	// Получаем координаты полигона
-	     $.getJSON("https://nominatim.openstreetmap.org/search.php?q=" + Keks + "&format=json&polygon_geojson=1&limit=1")
+	     $.getJSON("https://nominatim.openstreetmap.org/search.php?q=" + Region + "&format=json&polygon_geojson=1&limit=1")
 	         .then(function (data) {
 
 	             $.each(data, function(ix, place) {
@@ -170,7 +170,7 @@ function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxAr
 	                   // Создаем полигон с нужными координатами
 	                 	 if ((place.geojson.coordinates[1] == undefined) || ( place.geojson.coordinates[1][1] !=  undefined)) {
 		                     var p = new ymaps.Polygon(place.geojson.coordinates, {
-		                          hintContent: Keks
+		                          hintContent: Region
 		                      }, {
 		                          fillColor: color,
 		                          strokeColor: color,
@@ -181,7 +181,7 @@ function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxAr
 		                      });
 	                      } else {
 							var p = new ymaps.Polygon(place.geojson.coordinates[0], {
-		                          hintContent: Keks
+		                          hintContent: Region
 		                      }, {
 		                          fillColor: color,
 		                          strokeColor: color,
@@ -197,11 +197,10 @@ function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxAr
 
 	                      echo '
 	                     p.events.add(\'click\', function () {
-							// alert(Keks + mem);
 							$.alert({
-							title: Keks,
+							title: Region,
 							animation:\'scale\',
-							content: mem
+							content: desc
 							});
 						 });
 	                     map.geoObjects.add(p);';
@@ -229,24 +228,26 @@ function writeJS($SituationNameArr, $CityList, $BasicColors, $SitSortArr, $MaxAr
 
 
 
-	$kek = '';
+	$JScode = '';
 	for ($i = 0; $i < count($CityList); $i++) {
-						$mem = '\n';
+						$desc = '\n';
 						// Получаем, сколько раз каждая ситуация повторяется
 	                    for ($j = 0; $j < $n; $j++) {
 	                    	$count = $CityList[$i]->arr[$j] == 0 ? 0 : $CityList[$i]->arr[$j];
-	                    	$mem = $mem.'<div> <div style="height: 10px; width: 10px; margin-right: 5px; display: inline-block; background: '.$BasicColors[getRor($j, $ror, $n)].'"></div>';
-	                      	$mem = $mem.getSitName($SituationNameArr, $j, $n, $SitSortArr,$sort, $maxn).' - <b>'.$count.'</b> раз</div>';
+	                    	$desc = $desc.'<div> <div style="height: 10px; width: 10px; margin-right: 5px; display: inline-block; background: '.$BasicColors[getRor($j, $ror, $n)].'"></div>';
+	                      	$desc = $desc.getSitName($SituationNameArr, $j, $n, $SitSortArr,$sort, $maxn).' - <b>'.$count.'</b> раз</div>';
 	                    }
 		  if ($CityList[$i]->name != '') {
-		  $kek = $kek."ShowCity('".$CityList[$i]->name."','".getColors($CityList[$i]->arr, $BasicColors,$MaxArr, $n, $ror)."', '".$mem."');"; // Формируем JS-код, вызывающий функцию, которая будет отрисовывать города/районы на карте
+		  $JScode = $JScode."ShowCity('".$CityList[$i]->name."','".getColors($CityList[$i]->arr, $BasicColors,$MaxArr, $n, $ror)."', '".$desc."');"; // Формируем JS-код, вызывающий функцию, которая будет отрисовывать города/районы на карте
 // ($CityList, $BasicColors, $SitSortArr, $sort, $MaxArr, $n, $ror)
+
 		}
 	}
-	echo $kek;
+	echo $JScode;
 
 
 	echo '
+
 	 });
 	</script>';
 }
