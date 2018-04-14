@@ -19,9 +19,9 @@ Developed solution allows to visualize multidimensional information effectively.
 
 ## Used technologies
 **Languages:**  PHP(server part), JS(client part),HTML+CSS(markup + style), SQL(Database requests).<br>
-**DBMS:** MySQL
-**Third-party APIs:** Yandex map API (map rendering, polygon coloring, polygon click actions), Nominatim API(obtaining requested geographical region polygon).
-**Use example:** site brakh.men
+**DBMS:** MySQL<br>
+**Third-party APIs:** Yandex map API (map rendering, polygon coloring, polygon click actions), Nominatim API(obtaining requested geographical region polygon).<br>
+**Use example:** site brakh.men<br>
 
 ## How to use
 
@@ -43,10 +43,10 @@ ALTER TABLE `TableName`
 COMMIT;
 ```
 
-Database completion guide for developers:
-Region - the geographical name of the object to be painted (as precisely as possible). Example: Brooklyn, New York City, New York, USA, Earth, Sol, Milky Way, Universe (Unsign)
-Date - date, tied to the situation.
-Situation - situation number. (Each situation is assigned a unique number)
-Yaer - year of origin of the situation (For convenience of sorting by years)
-
+Database completion guide for developers:<br>
+Region - the geographical name of the object to be painted (as precisely as possible). Example: Brooklyn, New York City, New York, USA, Earth, Sol, Milky Way, Universe (Unsign)<br>
+Date - date, tied to the situation.<br>
+Situation - situation number. (Each situation is assigned a unique number)<br>
+Yaer - year of origin of the situation (For convenience of sorting by years)<br>
+<br><br>
 **Config.php** file have to be filled
